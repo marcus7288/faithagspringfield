@@ -80,40 +80,18 @@
             }
         }
 
-        .cross-symbol {
-            width: 60px;
-            height: 80px;
+        .logo {
+            max-width: 150px;
+            height: auto;
             margin: 0 auto 2rem;
-            position: relative;
+            display: block;
             opacity: 0;
             animation: fadeIn 1.5s ease-out 0.3s forwards;
+            filter: drop-shadow(0 0 20px rgba(201, 169, 97, 0.3));
         }
 
         @keyframes fadeIn {
             to { opacity: 1; }
-        }
-
-        .cross-symbol::before,
-        .cross-symbol::after {
-            content: '';
-            position: absolute;
-            background: var(--gold);
-            box-shadow: 0 0 30px rgba(201, 169, 97, 0.4);
-        }
-
-        .cross-symbol::before {
-            width: 8px;
-            height: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .cross-symbol::after {
-            width: 50px;
-            height: 8px;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
         }
 
         h1 {
@@ -570,7 +548,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <div class="cross-symbol"></div>
+            <img src="logo.svg" alt="Faith Assembly of God Logo" class="logo">
             <h1>Faith Assembly <strong>of God</strong></h1>
             <p class="tagline">A community of faith in Springfield, Missouri</p>
             <div class="cta-buttons">
@@ -674,15 +652,15 @@
             <div class="contact-info">
                 <div class="contact-item">
                     <h4>Location</h4>
-                    <p>3001 W Division Street<br>Springfield, MO 65802</p>
+                    <p>123 Faith Avenue<br>Springfield, MO 65802</p>
                 </div>
                 <div class="contact-item">
                     <h4>Phone</h4>
-                    <p><a href="tel:+14175551234">(417) 865-2126</a></p>
+                    <p><a href="tel:+14175551234">(417) 555-1234</a></p>
                 </div>
                 <div class="contact-item">
                     <h4>Email</h4>
-                    <p><a href="mailto:info@faithagspringfield.org">info@faithagspringfield.org</a></p>
+                    <p><a href="/cdn-cgi/l/email-protection#8ee7e0e8e1cee8efe7fae6efe9fdfefce7e0e9e8e7ebe2eaa0e1fce9"><span class="__cf_email__" data-cfemail="5831363e37183e39312c30393f2b282a31363f3e313d343c76372a3f">[email&#160;protected]</span></a></p>
                 </div>
                 <div class="contact-item">
                     <h4>Office Hours</h4>
@@ -690,21 +668,17 @@
                 </div>
             </div>
             <div class="map-container">
-              <iframe 
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.3841819024015!2d-93.33849308956631!3d37.22713266441124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87cf6220450efa2f%3A0x52391a46fbe04e54!2sSpringfield%20Faith%20Assembly%20Of%20God!5e0!3m2!1sen!2sus!4v1767471950329!5m2!1sen!2sus" 
-    width="100%" 
-    height="100%" 
-    style="border:0;" 
-    allowfullscreen="" 
-    loading="lazy">
-</iframe>
+                <div class="map-placeholder">
+                    <p style="font-size: 1.2rem; color: var(--deep-blue); font-weight: 600;">Springfield, Missouri</p>
+                    <p style="color: var(--charcoal); margin-top: 0.5rem;">Replace this with Google Maps embed</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="cross-symbol" style="margin-bottom: 2rem; opacity: 0.3;"></div>
+        <img src="logo.svg" alt="Faith Assembly of God Logo" class="logo" style="margin-bottom: 2rem; opacity: 0.6; max-width: 100px;">
         <p style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; margin-bottom: 0.5rem;">Faith Assembly of God</p>
         <p>Springfield, Missouri</p>
         <div class="social-links">
@@ -715,7 +689,7 @@
         <p style="margin-top: 2rem; font-size: 0.9rem;">&copy; 2026 Faith Assembly of God. All rights reserved.</p>
     </footer>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Smooth scroll animation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -745,12 +719,4 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.service-card, .ministry-item, .contact-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
-</body>
-</html>
+        document.querySelectorAll('.service-card, .ministry-item, .contact-item'
