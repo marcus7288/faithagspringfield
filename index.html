@@ -362,6 +362,70 @@
             opacity: 0.9;
         }
 
+        /* Plan Your Visit Section */
+        .visit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .visit-card {
+            background: var(--warm-white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border: 1px solid var(--light-gray);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .visit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: var(--gold);
+        }
+
+        .visit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .visit-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            color: var(--planty-green);
+            margin-bottom: 1rem;
+        }
+
+        .visit-card p {
+            color: var(--charcoal);
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .visit-highlight {
+            background: linear-gradient(135deg, var(--planty-green), #2C4A65);
+            grid-column: 1 / -1;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .visit-highlight h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .visit-highlight p {
+            color: var(--warm-white);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
         /* Ministries Section */
         .ministries-grid {
             display: grid;
@@ -520,8 +584,13 @@
             }
 
             .services-grid,
-            .ministries-grid {
+            .ministries-grid,
+            .visit-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .visit-highlight {
+                grid-column: 1;
             }
 
             section {
@@ -554,7 +623,7 @@
             <p class="tagline">LOVE | GROW | SHARE</p>
             <div class="cta-buttons">
                 <a href="#services" class="btn btn-primary">Service Times</a>
-                <a href="#contact" class="btn btn-secondary">Plan Your Visit</a>
+                <a href="#plan-visit" class="btn btn-secondary">Plan Your Visit</a>
             </div>
         </div>
         <div class="scroll-indicator"></div>
@@ -609,8 +678,52 @@
         </div>
     </section>
 
+    <!-- Plan Your Visit Section -->
+    <section id="plan-visit">
+        <div class="section-header">
+            <h2>Plan Your Visit</h2>
+            <p class="section-subtitle">Everything you need to know for your first visit</p>
+        </div>
+        <div class="visit-grid">
+            <div class="visit-card">
+                <span class="visit-icon">⏰</span>
+                <h3>When We Meet</h3>
+                <p>Join us Sunday mornings at 10:30 AM for worship. Wednesday nights at 7:00 PM for Bible study and family night.</p>
+            </div>
+            <div class="visit-card">
+                <span class="visit-icon">📍</span>
+                <h3>Where to Find Us</h3>
+                <p>We're located at 3001 W Division Street, Springfield, MO 65802. Plenty of parking available in our lot.</p>
+            </div>
+            <div class="visit-card">
+                <span class="visit-icon">👕</span>
+                <h3>What to Wear</h3>
+                <p>Come as you are! You'll see everything from jeans to suits. We care more about you being here than what you wear.</p>
+            </div>
+            <div class="visit-card">
+                <span class="visit-icon">👶</span>
+                <h3>Kids Are Welcome</h3>
+                <p>We have engaging children's programs during services. Check in at our kids' area when you arrive.</p>
+            </div>
+            <div class="visit-card">
+                <span class="visit-icon">☕</span>
+                <h3>Grab Some Coffee</h3>
+                <p>Stop by our welcome area for coffee and refreshments. Our friendly greeters will help you find your way.</p>
+            </div>
+            <div class="visit-card">
+                <span class="visit-icon">🙋</span>
+                <h3>What to Expect</h3>
+                <p>Expect a warm welcome, contemporary worship music, and practical teaching from the Bible. Services typically last about an hour.</p>
+            </div>
+            <div class="visit-highlight">
+                <h3>We Can't Wait to Meet You</h3>
+                <p>Your first visit is about experiencing our community, not about commitments. Feel free to sit back, relax, and see what Springfield Faith Assembly is all about. Our hope is that you'll feel right at home.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Ministries Section -->
-    <section id="ministries">
+    <section id="ministries" class="alternate">
         <div class="section-header">
             <h2>Our Ministries</h2>
             <p class="section-subtitle">Finding your place in God's family</p>
