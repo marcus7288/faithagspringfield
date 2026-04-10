@@ -1,51 +1,46 @@
 {
-    "churchName": "Springfield Faith Assembly",
-    "churchShortName": "SFA",
-    "tagline": "Love | Grow | Share",
-    "denomination": "Assembly of God",
-    "city": "Springfield",
-    "state": "MO",
-    "address": "3001 W. Division Street",
-    "addressLine2": "Springfield, MO 65803",
-    "phone": "(417) 865-2126",
-    "email": "springfieldfaithinfo@gmail.com",
-    "website": "https://sfaog.org",
-    "services": [
-        {
-            "day": "Sunday",
-            "name": "Sunday Morning Worship",
-            "time": "10:30 AM",
-            "description": "Uplifting worship, biblical teaching, and children's ministry for all ages."
-        },
-        {
-            "day": "Wednesday",
-            "name": "Wednesday Night Family Night",
-            "time": "7:00 PM",
-            "description": "In-depth Bible study, prayer, and fellowship. Youth and children's programs available."
-        }
-    ],
-    "social": {
-        "facebook": "https://facebook.com/yourpage",
-        "instagram": "https://instagram.com/yourpage",
-        "youtube": "https://youtube.com/@yourchannel"
+  "churchName": "Springfield Faith Assembly",
+  "churchShortName": "SFA",
+  "tagline": "Love | Grow | Share",
+  "denomination": "Assembly of God",
+  "address": "3001 W. Division Street",
+  "addressLine2": "Springfield, MO 65803",
+  "phone": "(417) 865-2126",
+  "email": "springfieldfaithinfo@gmail.com",
+  "website": "https://sfaog.org",
+  "services": [
+    {
+      "day": "Sunday",
+      "name": "Sunday Morning Worship",
+      "time": "10:30 AM",
+      "description": "Uplifting worship, biblical teaching, and children's ministry for all ages."
     },
-    "giving": {
-        "url": "https://tithe.ly/give",
-        "label": "Give Online"
-    },
-    "maps": {
-        "embedUrl": "https://www.google.com/maps/embed?pb=YOUR_MAPS_EMBED_URL_HERE"
-    },
-    "formspree": {
-        "formId": "https://formspree.io/f/maqlrwlr"
-    },
-    "github": {
-        "owner": "marcus7288",
-        "repo": "faithagspringfield",
-        "branch": "main"
-    },
-    "meta": {
-        "description": "A Spirit-filled church community. Everyone is welcome.",
-        "themeColor": "#1A3A52"
+    {
+      "day": "Wednesday",
+      "name": "Wednesday Night Family Night",
+      "time": "7:00 PM",
+      "description": "In-depth Bible study, prayer, and fellowship. Youth and children's programs available."
     }
+  ],
+  "social": {
+    "facebook": "https://facebook.com/yourpage",
+    "instagram": "https://instagram.com/yourpage",
+    "youtube": "https://youtube.com/@yourchannel"
+  },
+  "giving": {
+    "url": "https://tithe.ly/give",
+    "label": "Give Online"
+  },
+  "maps": {
+    "embedUrl": "https://www.google.com/maps/embed?pb=YOUR_MAPS_EMBED_URL_HERE"
+  },
+  "github": {
+    "owner": "marcus7288",
+    "repo": "faithagspringfield",
+    "branch": "main"
+  },
+  "meta": {
+    "description": "A Spirit-filled church community. Everyone is welcome.",
+    "themeColor": "#1A3A52"
+  }
 }
