@@ -32,7 +32,7 @@
     "label": "Give Online"
   },
   "maps": {
-    "embedUrl": "https://www.google.com/maps/embed?pb=<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12707.47568460384!2d-93.355084!3d37.2270865!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87cf6220450efa2f%3A0x52391a46fbe04e54!2sSpringfield%20Faith%20Assembly%20Of%20God!5e0!3m2!1sen!2sus!4v1775863544989!5m2!1sen!2sus"
+    "embedUrl": "https://www.google.com/maps/embed?pb=YOUR_MAPS_EMBED_URL_HERE"
   },
   "github": {
     "owner": "marcus7288",
