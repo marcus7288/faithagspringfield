@@ -1,15 +1,15 @@
 {
-    "churchName": "Your Church Name",
+    "churchName": "Springfield Faith Assembly",
     "churchShortName": "YCN",
     "tagline": "Love | Grow | Share",
     "denomination": "Assembly of God",
-    "city": "Your City",
+    "city": "Springfield",
     "state": "MO",
-    "address": "123 Main Street",
-    "addressLine2": "Your City, MO 00000",
-    "phone": "(000) 000-0000",
-    "email": "info@youremail.com",
-    "website": "https://yoursite.netlify.app",
+    "address": "3001 W Division Street",
+    "addressLine2": "Springfield, MO 65803",
+    "phone": "(417) 865-2126",
+    "email": "springfieldfaithinfo@gmail.com",
+    "website": "https://sfaog.org",
     "services": [
           {
                   "day": "Sunday",
@@ -34,14 +34,14 @@
           "label": "Give Online"
     },
     "maps": {
-          "embedUrl": "PASTE_YOUR_FULL_GOOGLE_MAPS_EMBED_URL_HERE"
+          "embedUrl": "<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d25414.95136920768!2d-93.3370596!3d37.2270865!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87cf6220450efa2f%3A0x52391a46fbe04e54!2sSpringfield%20Faith%20Assembly%20Of%20God!5e0!3m2!1sen!2sus!4v1775860258640!5m2!1sen!2sus"
     },
     "formspree": {
-          "formId": "YOUR_FORMSPREE_FORM_ID"
+          "formId": "https://formspree.io/f/maqlrwlr"
     },
     "github": {
-          "owner": "YOUR_GITHUB_USERNAME",
-          "repo": "YOUR_REPO_NAME",
+          "owner": "MARCUS7288",
+          "repo": "FAITHAGSPRINGFIELD",
           "branch": "main"
     },
     "meta": {
