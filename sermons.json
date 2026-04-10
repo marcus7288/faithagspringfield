@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "title": "Your Sermon Title Here",
+    "series": "Your Series Name",
+    "speaker": "Pastor",
+    "date": "2026-04-13",
+    "youtubeId": "",
+    "description": "Add your sermon description here. Update this from the Sermons tab in the admin panel."
+  }
+]

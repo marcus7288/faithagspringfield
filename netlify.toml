@@ -1,0 +1,11 @@
+# netlify.toml
+# Static HTML site - no build command needed
+
+[build]
+  publish = "."
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

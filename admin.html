@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faith AG Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F0F2F5;color:#1A2332;min-height:100vh}
+a{text-decoration:none;color:inherit}
+
+/* LOGIN */
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1A3A52,#2C4A65)}
+.login-card{background:#fff;border-radius:16px;padding:48px 40px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.3);text-align:center}
+.login-logo{height:60px;margin:0 auto 20px}
+.login-card h1{font-family:'Outfit',sans-serif;font-size:1.5rem;color:#1A3A52;margin-bottom:6px}
+.login-card p{color:#6B8090;font-size:0.88rem;margin-bottom:28px}
+.login-input{width:100%;padding:12px 16px;border:1.5px solid #D8CFC4;border-radius:8px;font-size:1rem;font-family:'Inter',sans-serif;margin-bottom:16px;transition:border 0.2s}
+.login-input:focus{outline:none;border-color:#1A3A52}
+.login-btn{width:100%;padding:13px;background:#1A3A52;color:#fff;border:none;border-radius:8px;font-size:0.95rem;font-weight:600;cursor:pointer;transition:background 0.2s}
+.login-btn:hover{background:#2C4A65}
+.login-error{color:#C0392B;font-size:0.85rem;margin-top:10px;display:none}
+
+/* LAYOUT */
+#admin-panel{display:none;min-height:100vh;flex-direction:column}
+.admin-header{background:#1A3A52;color:#fff;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,0.2)}
+.admin-header-left{display:flex;align-items:center;gap:14px}
+.admin-header img{height:34px}
+.admin-header h1{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:0.02em}
+.admin-header-right{display:flex;align-items:center;gap:12px}
+.header-btn{padding:7px 16px;border-radius:6px;font-size:0.82rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s}
+.btn-logout{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.85)}
+.btn-logout:hover{background:rgba(255,255,255,0.2)}
+
+/* PUBLISH BAR */
+.publish-bar{background:#1a472a;padding:12px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:2px solid #145222}
+.publish-bar label{color:#d4edda;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
+.token-input{flex:1;min-width:220px;max-width:420px;padding:8px 12px;border:1.5px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem}
+.token-input::placeholder{color:rgba(255,255,255,0.4)}
+.token-input:focus{outline:none;border-color:rgba(255,255,255,0.5)}
+.token-saved{font-size:0.75rem;color:#7bcf8b;display:none;align-items:center;gap:4px}
+#publish-status{font-size:0.8rem;color:rgba(255,255,255,0.7);min-width:140px}
+#publish-status.success{color:#7bcf8b}
+#publish-status.error{color:#f08080}
+#publish-status.publishing{color:#ffd700}
+.token-setup-link{color:rgba(255,255,255,0.5);font-size:0.75rem;text-decoration:underline;cursor:pointer;white-space:nowrap}
+
+/* TABS */
+.admin-body{display:flex;flex:1}
+.admin-sidebar{width:220px;background:#fff;border-right:1px solid #E5E9EE;padding:20px 0;flex-shrink:0}
+.sidebar-section{padding:0 16px;margin-bottom:6px}
+.sidebar-section-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A0ADB8;padding:0 8px;margin-bottom:4px}
+.sidebar-link{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:#3D5166;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left}
+.sidebar-link i{width:18px;text-align:center;color:#A0ADB8;font-size:0.9rem}
+.sidebar-link:hover{background:#F0F2F5;color:#1A2332}
+.sidebar-link.active{background:#EBF5FB;color:#1A3A52;font-weight:600}
+.sidebar-link.active i{color:#1A3A52}
+.unsaved-dot{display:none;width:7px;height:7px;background:#E74C3C;border-radius:50%;margin-left:auto}
+.unsaved-dot.show{display:block}
+
+.admin-content{flex:1;padding:32px;overflow-y:auto}
+.tab-pane{display:none}
+.tab-pane.active{display:block}
+
+/* CARDS */
+.content-card{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:24px;overflow:hidden}
+.card-header{padding:20px 24px;border-bottom:1px solid #F0F2F5;display:flex;align-items:center;justify-content:space-between}
+.card-header h2{font-family:'Outfit',sans-serif;font-size:1.05rem;font-weight:600;color:#1A2332}
+.card-header p{font-size:0.82rem;color:#6B8090;margin-top:2px}
+.card-body{padding:24px}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 20px;border-radius:7px;font-size:0.85rem;font-weight:600;cursor:pointer;border:none;transition:all 0.2s}
+.btn-primary{background:#1A3A52;color:#fff}
+.btn-primary:hover{background:#2C4A65}
+.btn-success{background:#27AE60;color:#fff}
+.btn-success:hover{background:#219150}
+.btn-danger{background:#E74C3C;color:#fff}
+.btn-danger:hover{background:#C0392B}
+.btn-warning{background:#F39C12;color:#fff}
+.btn-warning:hover{background:#D68910}
+.btn-outline{background:transparent;color:#1A3A52;border:1.5px solid #D8CFC4}
+.btn-outline:hover{background:#F0F2F5}
+.btn-sm{padding:6px 13px;font-size:0.78rem}
+.btn-publish{background:#27AE60;color:#fff;padding:9px 22px;position:relative}
+.btn-publish:hover{background:#219150}
+
+/* FORM */
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:0.8rem;font-weight:600;color:#3D5166;letter-spacing:0.04em;margin-bottom:5px;text-transform:uppercase}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 13px;border:1.5px solid #D8CFC4;border-radius:7px;font-family:'Inter',sans-serif;font-size:0.9rem;color:#1A2332;background:#FAFAFA;transition:border 0.2s}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#1A3A52;background:#fff}
+.form-group textarea{resize:vertical;min-height:90px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-hint{font-size:0.76rem;color:#A0ADB8;margin-top:5px}
+
+/* TOGGLE */
+.toggle-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #F0F2F5}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{flex:1}
+.toggle-label strong{display:block;font-size:0.92rem;color:#1A2332;margin-bottom:2px}
+.toggle-label span{font-size:0.82rem;color:#A0ADB8}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#D8CFC4;border-radius:24px;cursor:pointer;transition:0.3s}
+.toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.3s}
+.toggle input:checked+.toggle-slider{background:#27AE60}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
+
+/* TABLE */
+.events-table{width:100%;border-collapse:collapse;font-size:0.88rem}
+.events-table th{padding:10px 14px;text-align:left;background:#F7F9FC;color:#6B8090;font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;border-bottom:2px solid #E5E9EE}
+.events-table td{padding:13px 14px;border-bottom:1px solid #F0F2F5;color:#3D5166;vertical-align:middle}
+.events-table tr:hover td{background:#FAFBFC}
+.cat-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.72rem;font-weight:700;letter-spacing:0.06em}
+.cat-Worship{background:#E8F8E8;color:#27AE60}
+.cat-Special{background:#FEF9E7;color:#F39C12}
+.cat-Bible.Study{background:#EBF5FB;color:#2980B9}
+.cat-Outreach{background:#FDEDEC;color:#E74C3C}
+.cat-Youth{background:#F3F0FF;color:#8E44AD}
+.cat-default{background:#F0F2F5;color:#6B8090}
+.action-btns{display:flex;gap:6px}
+
+/* MODAL */
+#modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+#modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.modal-header{padding:22px 24px;border-bottom:1px solid #F0F2F5;display:flex;align-items:center;justify-content:space-between}
+.modal-header h3{font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:600}
+.modal-close{background:none;border:none;font-size:1.3rem;cursor:pointer;color:#A0ADB8;line-height:1;padding:4px}
+.modal-close:hover{color:#1A2332}
+.modal-body{padding:24px}
+.modal-footer{padding:16px 24px;border-top:1px solid #F0F2F5;display:flex;justify-content:flex-end;gap:10px}
+
+/* PASSWORD */
+.hash-box{background:#F7F9FC;border:1px solid #E5E9EE;border-radius:8px;padding:14px;font-family:monospace;font-size:0.78rem;word-break:break-all;color:#3D5166;margin-top:10px;display:none}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);text-align:center}
+.stat-card .stat-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#1A3A52;line-height:1}
+.stat-card .stat-label{font-size:0.8rem;color:#A0ADB8;margin-top:4px}
+.stat-card i{font-size:1.4rem;color:#E5D4A6;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+<div class="login-card">
+    <img src="logo 2.png" alt="Faith AG" class="login-logo">
+    <h1>Staff Admin Panel</h1>
+    <p>Faith Assembly of God</p>
+    <input type="password" id="password-input" class="login-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <button class="login-btn" onclick="login()"><i class="fa-solid fa-lock-open"></i> Sign In</button>
+    <p class="login-error" id="login-error">Incorrect password. Please try again.</p>
+</div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel">
+
+    <!-- Header -->
+    <div class="admin-header">
+        <div class="admin-header-left">
+            <img src="logo 2.png" alt="Faith AG">
+            <h1>Faith AG Admin Panel</h1>
+        </div>
+        <div class="admin-header-right">
+            <a href="/" target="_blank" class="header-btn btn-logout" style="color:rgba(255,255,255,0.7)"><i class="fa-solid fa-globe"></i> View Site</a>
+            <button class="header-btn btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</button>
+        </div>
+    </div>
+
+    <!-- Publish Bar -->
+    <div class="publish-bar">
+        <label><i class="fa-brands fa-github"></i> GitHub Token</label>
+        <input type="password" id="gh-token" class="token-input" placeholder="ghp_xxxx... (saved in browser)" oninput="onTokenInput(this.value)">
+        <span class="token-saved" id="token-saved-badge"><i class="fa-solid fa-check"></i> Saved</span>
+        <button class="btn btn-publish" id="publish-btn" onclick="publishAll()">
+            <span id="unsaved-dot" class="unsaved-dot show"></span>
+            <i class="fa-solid fa-rocket"></i> Save &amp; Publish All
+        </button>
+        <span id="publish-status"></span>
+        <a class="token-setup-link" href="https://github.com/settings/tokens?type=beta" target="_blank">Get Token &rarr;</a>
+    </div>
+
+    <!-- Body -->
+    <div class="admin-body">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-section-label">Manage</div>
+                <button class="sidebar-link active" onclick="switchTab('events', this)">
+                    <i class="fa-regular fa-calendar"></i> Events
+                    <span class="unsaved-dot" id="events-dot"></span>
+                </button>
+                <button class="sidebar-link" onclick="switchTab('announcement', this)">
+                    <i class="fa-solid fa-bullhorn"></i> Announcement
+                    <span class="unsaved-dot" id="announcement-dot"></span>
+                </button>
+                <button class="sidebar-link" onclick="switchTab('sermons', this)">
+                    <i class="fa-brands fa-youtube"></i> Sermons
+                    <span class="unsaved-dot" id="sermons-dot"></span>
+                </button>
+            </div>
+            <div class="sidebar-section" style="margin-top:16px">
+                <div class="sidebar-section-label">Settings</div>
+                <button class="sidebar-link" onclick="switchTab('config', this)">
+                    <i class="fa-solid fa-gear"></i> Church Settings
+                    <span class="unsaved-dot" id="config-dot"></span>
+                </button>
+                <button class="sidebar-link" onclick="switchTab('password', this)">
+                    <i class="fa-solid fa-key"></i> Change Password
+                </button>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="admin-content">
+
+            <!-- DASHBOARD stats row -->
+            <div class="stats-row" id="stats-row">
+                <div class="stat-card"><i class="fa-regular fa-calendar"></i><div class="stat-num" id="stat-events">0</div><div class="stat-label">Upcoming Events</div></div>
+                <div class="stat-card"><i class="fa-solid fa-bullhorn"></i><div class="stat-num" id="stat-banner">OFF</div><div class="stat-label">Banner Status</div></div>
+                <div class="stat-card"><i class="fa-brands fa-youtube"></i><div class="stat-num" id="stat-sermons">0</div><div class="stat-label">Sermons</div></div>
+                <div class="stat-card"><i class="fa-solid fa-gear"></i><div class="stat-num" id="stat-config" style="font-size:1rem;margin-top:4px">Not Set</div><div class="stat-label">Church Name</div></div>
+            </div>
+
+            <!-- EVENTS TAB -->
+            <div id="tab-events" class="tab-pane active">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div><h2>Upcoming Events</h2><p>Add, edit, or remove events shown on the website.</p></div>
+                        <button class="btn btn-primary btn-sm" onclick="openModal()"><i class="fa-solid fa-plus"></i> Add Event</button>
+                    </div>
+                    <div class="card-body" style="padding:0">
+                        <table class="events-table">
+                            <thead><tr><th>Title</th><th>Date</th><th>Time</th><th>Category</th><th>Actions</th></tr></thead>
+                            <tbody id="events-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANNOUNCEMENT TAB -->
+            <div id="tab-announcement" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div><h2>Announcement Banner</h2><p>Display a notice at the top of the website. Toggle it on/off anytime.</p></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="toggle-row">
+                            <div class="toggle-label"><strong>Show Banner on Website</strong><span>Turn the announcement bar on or off</span></div>
+                            <label class="toggle"><input type="checkbox" id="banner-active" onchange="announcementChanged()"><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="form-group" style="margin-top:20px">
+                            <label>Banner Message</label>
+                            <textarea id="banner-text" rows="3" placeholder="Join us this Sunday for Easter Service at 10:30 AM! Everyone is welcome." oninput="announcementChanged()"></textarea>
+                            <div class="form-hint">You can include a link like: &lt;a href="#events"&gt;See Events&lt;/a&gt;</div>
+                        </div>
+                        <div style="padding:16px;background:#FEF9E7;border-radius:8px;border-left:4px solid #F39C12;font-size:0.85rem;color:#7D6608;">
+                            <strong>Preview:</strong> <span id="banner-preview" style="font-style:italic;color:#555"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SERMONS TAB -->
+            <div id="tab-sermons" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div><h2>Latest Sermon</h2><p>Update the featured sermon shown on the website.</p></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group"><label>Sermon Title</label><input type="text" id="sermon-title" placeholder="Walking in Faith" oninput="sermonChanged()"></div>
+                            <div class="form-group"><label>Series Name</label><input type="text" id="sermon-series" placeholder="Faith That Works" oninput="sermonChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Speaker Name</label><input type="text" id="sermon-speaker" placeholder="Pastor" oninput="sermonChanged()"></div>
+                            <div class="form-group"><label>Date</label><input type="date" id="sermon-date" oninput="sermonChanged()"></div>
+                        </div>
+                        <div class="form-group">
+                            <label>YouTube Video ID</label>
+                            <input type="text" id="sermon-youtube" placeholder="e.g. dQw4w9WgXcQ (from youtube.com/watch?v=dQw4w9WgXcQ)" oninput="sermonChanged()">
+                            <div class="form-hint">Paste just the video ID from the URL — not the full link.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="sermon-desc" placeholder="Brief description of the message..." oninput="sermonChanged()"></textarea>
+                        </div>
+                        <div style="padding:14px;background:#EBF5FB;border-radius:8px;font-size:0.82rem;color:#1A5276;border-left:4px solid #2980B9">
+                            <i class="fa-solid fa-circle-info"></i> After saving, this sermon will appear in the &ldquo;Sermons&rdquo; section of the website. Leave YouTube ID blank to show a placeholder.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- CONFIG TAB -->
+            <div id="tab-config" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div><h2>Church Settings</h2><p>Update your church's name, address, contact info, and more.</p></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group"><label>Church Name</label><input type="text" id="cfg-name" placeholder="" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Short Name / Initials</label><input type="text" id="cfg-short" placeholder="SFA" oninput="configChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Tagline</label><input type="text" id="cfg-tagline" placeholder="Love | Grow | Share" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Denomination</label><input type="text" id="cfg-denom" placeholder="Assembly of God" oninput="configChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Street Address</label><input type="text" id="cfg-address" placeholder="123 Main Street" oninput="configChanged()"></div>
+                            <div class="form-group"><label>City, State ZIP</label><input type="text" id="cfg-address2" placeholder="Springfield, MO 65802" oninput="configChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Phone</label><input type="text" id="cfg-phone" placeholder="(417) 555-0000" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Email</label><input type="email" id="cfg-email" placeholder="info@youremail.com" oninput="configChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Facebook URL</label><input type="url" id="cfg-fb" placeholder="https://facebook.com/yourchurch" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Instagram URL</label><input type="url" id="cfg-ig" placeholder="https://instagram.com/yourchurch" oninput="configChanged()"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>YouTube URL</label><input type="url" id="cfg-yt" placeholder="https://youtube.com/@yourchannel" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Online Giving URL</label><input type="url" id="cfg-give" placeholder="https://tithe.ly/give" oninput="configChanged()"></div>
+                        </div>
+                        <hr style="border:none;border-top:1px solid #F0F2F5;margin:8px 0 16px">
+                        <p style="font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A0ADB8;margin-bottom:12px">GitHub Publishing Settings</p>
+                        <div class="form-row">
+                            <div class="form-group"><label>GitHub Username</label><input type="text" id="cfg-gh-owner" placeholder="your-github-username" oninput="configChanged()"></div>
+                            <div class="form-group"><label>Repository Name</label><input type="text" id="cfg-gh-repo" placeholder="your-repo-name" oninput="configChanged()"></div>
+                        </div>
+                        <div style="padding:14px;background:#FEF9E7;border-radius:8px;font-size:0.82rem;color:#7D6608;border-left:4px solid #F39C12;margin-top:8px">
+                            <i class="fa-solid fa-triangle-exclamation"></i> After changing GitHub Username or Repository Name, reload the admin panel for the new settings to take effect.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PASSWORD TAB -->
+            <div id="tab-password" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header"><div><h2>Change Admin Password</h2><p>Generate a new password hash and update the admin.html file.</p></div></div>
+                    <div class="card-body">
+                        <div class="form-group"><label>New Password</label><input type="password" id="new-pw" placeholder="Enter new password"></div>
+                        <button class="btn btn-primary" onclick="generateHash()"><i class="fa-solid fa-key"></i> Generate Hash</button>
+                        <div class="hash-box" id="hash-display"></div>
+                        <p style="font-size:0.82rem;color:#A0ADB8;margin-top:16px">Copy the hash above and replace the <code>STORED_HASH</code> value in admin.html via GitHub.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /admin-content -->
+    </div><!-- /admin-body -->
+</div><!-- /admin-panel -->
+
+<!-- EVENT MODAL -->
+<div id="modal-overlay">
+<div class="modal">
+    <div class="modal-header">
+        <h3 id="modal-title">Add Event</h3>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" id="f-id">
+        <div class="form-group"><label>Event Title</label><input type="text" id="f-title" placeholder="Easter Sunday Service"></div>
+        <div class="form-row">
+            <div class="form-group"><label>Date</label><input type="date" id="f-date"></div>
+            <div class="form-group"><label>Time</label><input type="text" id="f-time" placeholder="10:30 AM"></div>
+        </div>
+        <div class="form-group"><label>Category</label>
+            <select id="f-category">
+                <option>Worship</option><option>Bible Study</option><option>Outreach</option>
+                <option>Special</option><option>Youth</option><option>Prayer</option><option>Children</option>
+            </select>
+        </div>
+        <div class="form-group"><label>Description</label><textarea id="f-description" placeholder="Event details..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveEvent()"><i class="fa-solid fa-floppy-disk"></i> Save Event</button>
+    </div>
+</div>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+// ===== CONFIG =====
+const STORED_HASH = '1ef8e607eaee9385b078c85dd968696d4b6ea7b03a397ea46f3a1c5c852c6103';
+// GitHub config - loaded from config.json at runtime
+let GH_OWNER = 'YOUR_GITHUB_USERNAME';
+let GH_REPO = 'YOUR_REPO_NAME';
+let GH_BRANCH = 'main';
+
+// ===== SHA256 =====
+async function sha256(msg) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+// ===== BASE64 =====
+function b64encode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach(b => bin += String.fromCharCode(b));
+    return btoa(bin);
+}
+
+// ===== AUTH =====
+async function login() {
+    const pw = document.getElementById('password-input').value;
+    const hash = await sha256(pw);
+    if (hash === STORED_HASH) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'flex';
+        initAdmin();
+    } else {
+        document.getElementById('login-error').style.display = 'block';
+        document.getElementById('password-input').value = '';
+    }
+}
+function logout() {
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('password-input').value = '';
+}
+
+// ===== TABS =====
+function switchTab(name, btn) {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+}
+
+// ===== TOKEN =====
+function onTokenInput(val) {
+    localStorage.setItem('faithag_gh_token', val);
+    document.getElementById('token-saved-badge').style.display = val ? 'flex' : 'none';
+}
+
+// ===== UNSAVED =====
+let unsavedEvents = false, unsavedAnnouncement = false, unsavedSermons = false;
+function markUnsaved(type) {
+    if (type === 'events') { unsavedEvents = true; document.getElementById('events-dot').classList.add('show'); }
+    if (type === 'announcement') { unsavedAnnouncement = true; document.getElementById('announcement-dot').classList.add('show'); }
+    if (type === 'sermons') { unsavedSermons = true; document.getElementById('sermons-dot').classList.add('show'); }
+    document.getElementById('unsaved-dot').classList.add('show');
+}
+function markAllSaved() {
+    unsavedEvents = false; unsavedAnnouncement = false; unsavedSermons = false; unsavedConfig = false;
+    document.querySelectorAll('.unsaved-dot').forEach(d => d.classList.remove('show'));
+}
+
+// ===== EVENTS =====
+let events = [];
+function loadEvents() {
+    fetch('./events.json?v=' + Date.now())
+        .then(r => r.json())
+        .then(data => { events = data; renderEventsTable(); updateStats(); })
+        .catch(() => { events = []; });
+}
+
+function renderEventsTable() {
+    const tbody = document.getElementById('events-tbody');
+    if (!events.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#A0ADB8;padding:32px">No events yet. Click + Add Event to create one.</td></tr>';
+        return;
+    }
+    const sorted = [...events].sort((a,b) => new Date(a.date) - new Date(b.date));
+    tbody.innerHTML = sorted.map(e => {
+        const cat = (e.category||'').replace(/s+/g,'-');
+        return `<tr>
+            <td style="font-weight:600;color:#1A2332">${esc(e.title)}</td>
+            <td>${fmtDate(e.date)}</td>
+            <td>${esc(e.time)}</td>
+            <td><span class="cat-badge cat-${cat}">${esc(e.category||'')}</span></td>
+            <td><div class="action-btns">
+                <button class="btn btn-warning btn-sm" onclick="editEvent(${e.id})"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn btn-danger btn-sm" onclick="deleteEvent(${e.id})"><i class="fa-solid fa-trash"></i></button>
+            </div></td>
+        </tr>`;
+    }).join('');
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d) {
+    const dt = new Date(d + 'T00:00:00');
+    return dt.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+// ===== MODAL =====
+let editingId = null;
+function openModal(id) {
+    editingId = id || null;
+    document.getElementById('modal-title').textContent = id ? 'Edit Event' : 'Add Event';
+    if (id) {
+        const e = events.find(ev => ev.id === id);
+        if (e) {
+            document.getElementById('f-id').value = e.id;
+            document.getElementById('f-title').value = e.title || '';
+            document.getElementById('f-date').value = e.date || '';
+            document.getElementById('f-time').value = e.time || '';
+            document.getElementById('f-category').value = e.category || 'Worship';
+            document.getElementById('f-description').value = e.description || '';
+        }
+    } else {
+        document.getElementById('f-id').value = '';
+        document.getElementById('f-title').value = '';
+        document.getElementById('f-date').value = '';
+        document.getElementById('f-time').value = '';
+        document.getElementById('f-category').value = 'Worship';
+        document.getElementById('f-description').value = '';
+    }
+    document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function saveEvent() {
+    const title = document.getElementById('f-title').value.trim();
+    const date = document.getElementById('f-date').value;
+    const time = document.getElementById('f-time').value.trim();
+    if (!title || !date || !time) { alert('Please fill in Title, Date, and Time.'); return; }
+    if (editingId) {
+        const idx = events.findIndex(e => e.id === editingId);
+        if (idx >= 0) {
+            events[idx] = { id: editingId, title, date, time,
+                category: document.getElementById('f-category').value,
+                description: document.getElementById('f-description').value.trim() };
+        }
+    } else {
+        const newId = events.length ? Math.max(...events.map(e => e.id)) + 1 : 1;
+        events.push({ id: newId, title, date, time,
+            category: document.getElementById('f-category').value,
+            description: document.getElementById('f-description').value.trim() });
+    }
+    closeModal();
+    renderEventsTable();
+    updateStats();
+    markUnsaved('events');
+}
+function editEvent(id) { openModal(id); }
+function deleteEvent(id) {
+    if (!confirm('Delete this event?')) return;
+    events = events.filter(e => e.id !== id);
+    renderEventsTable();
+    updateStats();
+    markUnsaved('events');
+}
+
+// ===== ANNOUNCEMENT =====
+let announcementData = { active: false, text: '' };
+function loadAnnouncement() {
+    fetch('./announcements.json?v=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            announcementData = data;
+            document.getElementById('banner-active').checked = !!data.active;
+            document.getElementById('banner-text').value = data.text || '';
+            updateBannerPreview();
+            updateStats();
+        })
+        .catch(() => {});
+}
+function announcementChanged() {
+    announcementData.active = document.getElementById('banner-active').checked;
+    announcementData.text = document.getElementById('banner-text').value;
+    updateBannerPreview();
+    updateStats();
+    markUnsaved('announcement');
+}
+function updateBannerPreview() {
+    const preview = document.getElementById('banner-preview');
+    const txt = document.getElementById('banner-text').value;
+    preview.textContent = txt || '(no text set)';
+}
+
+// ===== SERMONS =====
+let sermonsData = [];
+function loadSermons() {
+    fetch('./sermons.json?v=' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+            sermonsData = data || [];
+            if (sermonsData.length) {
+                const s = sermonsData[0];
+                document.getElementById('sermon-title').value = s.title || '';
+                document.getElementById('sermon-series').value = s.series || '';
+                document.getElementById('sermon-speaker').value = s.speaker || '';
+                document.getElementById('sermon-date').value = s.date || '';
+                document.getElementById('sermon-youtube').value = s.youtubeId || '';
+                document.getElementById('sermon-desc').value = s.description || '';
+            }
+            updateStats();
+        })
+        .catch(() => {});
+}
+function sermonChanged() {
+    markUnsaved('sermons');
+}
+function getSermonData() {
+    return [{
+        id: 1,
+        title: document.getElementById('sermon-title').value.trim(),
+        series: document.getElementById('sermon-series').value.trim(),
+        speaker: document.getElementById('sermon-speaker').value.trim(),
+        date: document.getElementById('sermon-date').value,
+        youtubeId: document.getElementById('sermon-youtube').value.trim(),
+        description: document.getElementById('sermon-desc').value.trim()
+    }];
+}
+
+// ===== STATS =====
+function updateStats() {
+    const today = new Date(); today.setHours(0,0,0,0); today.setDate(today.getDate() - 7);
+    const upcoming = events.filter(e => new Date(e.date + 'T00:00:00') >= today).length;
+    document.getElementById('stat-events').textContent = upcoming;
+    const active = document.getElementById('banner-active') ? document.getElementById('banner-active').checked : announcementData.active;
+    document.getElementById('stat-banner').textContent = active ? 'ON' : 'OFF';
+    document.getElementById('stat-banner').style.color = active ? '#27AE60' : '#E74C3C';
+    document.getElementById('stat-sermons').textContent = sermonsData.length;
+}
+
+
+// ===== CONFIG MANAGEMENT =====
+let configData = {};
+let unsavedConfig = false;
+
+function loadConfigData() {
+    fetch('./config.json?v=' + Date.now())
+        .then(r => r.json())
+        .then(c => {
+            configData = c;
+            // Apply GH settings from config
+            if (c.github) {
+                if (c.github.owner) GH_OWNER = c.github.owner;
+                if (c.github.repo) GH_REPO = c.github.repo;
+                if (c.github.branch) GH_BRANCH = c.github.branch;
+            }
+            // Populate form fields
+            const f = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val || ''; };
+            f('cfg-name', c.churchName);
+            f('cfg-short', c.churchShortName);
+            f('cfg-tagline', c.tagline);
+            f('cfg-denom', c.denomination);
+            f('cfg-address', c.address);
+            f('cfg-address2', c.addressLine2);
+            f('cfg-phone', c.phone);
+            f('cfg-email', c.email);
+            f('cfg-fb', c.social && c.social.facebook);
+            f('cfg-ig', c.social && c.social.instagram);
+            f('cfg-yt', c.social && c.social.youtube);
+            f('cfg-give', c.giving && c.giving.url);
+            f('cfg-gh-owner', c.github && c.github.owner);
+            f('cfg-gh-repo', c.github && c.github.repo);
+            // Update stat
+            const statEl = document.getElementById('stat-config');
+            if (statEl) statEl.textContent = c.churchName || 'Not Set';
+        })
+        .catch(() => {});
+}
+
+function configChanged() {
+    unsavedConfig = true;
+    document.getElementById('config-dot').classList.add('show');
+    document.getElementById('unsaved-dot').classList.add('show');
+    // Update stat preview
+    const nameEl = document.getElementById('cfg-name');
+    const statEl = document.getElementById('stat-config');
+    if (statEl && nameEl) statEl.textContent = nameEl.value || 'Not Set';
+}
+
+function getConfigData() {
+    return {
+        churchName: document.getElementById('cfg-name').value,
+        churchShortName: document.getElementById('cfg-short').value,
+        tagline: document.getElementById('cfg-tagline').value,
+        denomination: document.getElementById('cfg-denom').value,
+        address: document.getElementById('cfg-address').value,
+        addressLine2: document.getElementById('cfg-address2').value,
+        phone: document.getElementById('cfg-phone').value,
+        email: document.getElementById('cfg-email').value,
+        website: configData.website || '',
+        services: configData.services || [],
+        social: {
+            facebook: document.getElementById('cfg-fb').value,
+            instagram: document.getElementById('cfg-ig').value,
+            youtube: document.getElementById('cfg-yt').value
+        },
+        giving: {
+            url: document.getElementById('cfg-give').value,
+            label: 'Give Online'
+        },
+        maps: configData.maps || {},
+        github: {
+            owner: document.getElementById('cfg-gh-owner').value,
+            repo: document.getElementById('cfg-gh-repo').value,
+            branch: GH_BRANCH
+        },
+        meta: configData.meta || {}
+    };
+}
+// ===== PUBLISH ALL =====
+async function publishAll() {
+    const token = document.getElementById('gh-token').value || localStorage.getItem('faithag_gh_token') || '';
+    if (!token) { setStatus('error', 'Please enter your GitHub token first.'); return; }
+    setStatus('publishing', 'Publishing...');
+    const btn = document.getElementById('publish-btn');
+    btn.disabled = true;
+
+    const files = [
+        { path: 'events.json', content: JSON.stringify(events, null, 2), label: 'events' },
+        { path: 'announcements.json', content: JSON.stringify({ active: document.getElementById('banner-active').checked, text: document.getElementById('banner-text').value }, null, 2), label: 'announcement' },
+        { path: 'sermons.json', content: JSON.stringify(getSermonData(), null, 2), label: 'sermons' },
+        { path: 'config.json', content: JSON.stringify(getConfigData(), null, 2), label: 'config' }
+    ];
+
+    let successCount = 0;
+    for (const file of files) {
+        try {
+            const shaRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
+                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
+            });
+            const shaData = shaRes.ok ? await shaRes.json() : {};
+            const payload = { message: `Update ${file.path} via admin panel`, content: b64encode(file.content), branch: GH_BRANCH };
+            if (shaData.sha) payload.sha = shaData.sha;
+            const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
+                method: 'PUT',
+                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (putRes.ok) successCount++;
+            else { const err = await putRes.json(); throw new Error(err.message); }
+        } catch(e) {
+            setStatus('error', 'Error: ' + e.message);
+            btn.disabled = false;
+            return;
+        }
+    }
+    setStatus('success', '\u2713 All ' + successCount + ' files published! Site updating...');
+    markAllSaved();
+    btn.disabled = false;
+    setTimeout(() => setStatus('', ''), 6000);
+}
+
+function setStatus(type, msg) {
+    const el = document.getElementById('publish-status');
+    el.className = type;
+    el.textContent = msg;
+}
+
+// ===== PASSWORD =====
+async function generateHash() {
+    const pw = document.getElementById('new-pw').value;
+    if (!pw) { alert('Enter a password first.'); return; }
+    const hash = await sha256(pw);
+    const box = document.getElementById('hash-display');
+    box.textContent = hash;
+    box.style.display = 'block';
+}
+
+// ===== INIT =====
+function initAdmin() {
+    const saved = localStorage.getItem('faithag_gh_token') || '';
+    if (saved) {
+        document.getElementById('gh-token').value = saved;
+        document.getElementById('token-saved-badge').style.display = 'flex';
+    }
+    loadEvents();
+    loadAnnouncement();
+    loadSermons();
+    loadConfigData();
+}
+</script>
+</body>
+</html>

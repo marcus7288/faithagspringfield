@@ -1,0 +1,15 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="150" cy="150" r="140" fill="#1a3a52" opacity="0.1"/>
+  
+  <!-- Cross -->
+  <rect x="140" y="60" width="20" height="180" fill="#C9A961"/>
+  <rect x="70" y="130" width="160" height="20" fill="#C9A961"/>
+  
+  <!-- Glow Effect -->
+  <circle cx="150" cy="150" r="140" fill="none" stroke="#C9A961" stroke-width="2" opacity="0.3"/>
+  
+  <!-- Text -->
+  <text x="150" y="260" font-family="serif" font-size="24" fill="#1a3a52" text-anchor="middle" font-weight="bold">FAITH</text>
+  <text x="150" y="285" font-family="serif" font-size="16" fill="#C9A961" text-anchor="middle">Assembly of God</text>
+</svg>
