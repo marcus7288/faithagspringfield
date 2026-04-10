@@ -1,15 +1,15 @@
 {
-    "churchName": "YOUR CHURCH NAME",
-    "churchShortName": "FAG",
-    "tagline": "YOUR TAGLINE HERE",
+    "churchName": "Springfield Faith Assembly",
+    "churchShortName": "SFA",
+    "tagline": "Love | Grow | Share",
     "denomination": "Assembly of God",
-    "city": "YOUR CITY",
-    "state": "ST",
-    "address": "123 Church Street",
-    "addressLine2": "Your City, ST 00000",
-    "phone": "(000) 000-0000",
-    "email": "info@yourchurch.org",
-    "website": "https://yourchurch.org",
+    "city": "Springfield",
+    "state": "MO",
+    "address": "3001 W. Division Street",
+    "addressLine2": "Springfield, MO 65803",
+    "phone": "(417) 865-2126",
+    "email": "springfieldfaithinfo@gmail.com",
+    "website": "https://sfaog.org",
     "services": [
         {
             "day": "Sunday",
@@ -37,7 +37,7 @@
         "embedUrl": "https://www.google.com/maps/embed?pb=YOUR_MAPS_EMBED_URL_HERE"
     },
     "formspree": {
-        "formId": "YOUR_FORMSPREE_ID"
+        "formId": "https://formspree.io/f/maqlrwlr"
     },
     "github": {
         "owner": "marcus7288",
