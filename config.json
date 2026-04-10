@@ -1,51 +1,51 @@
 {
-    "churchName": "Springfield Faith Assembly",
-    "churchShortName": "YCN",
-    "tagline": "Love | Grow | Share",
+    "churchName": "YOUR CHURCH NAME",
+    "churchShortName": "FAG",
+    "tagline": "YOUR TAGLINE HERE",
     "denomination": "Assembly of God",
-    "city": "Springfield",
-    "state": "MO",
-    "address": "3001 W Division Street",
-    "addressLine2": "Springfield, MO 65803",
-    "phone": "(417) 865-2126",
-    "email": "springfieldfaithinfo@gmail.com",
-    "website": "https://sfaog.org",
+    "city": "YOUR CITY",
+    "state": "ST",
+    "address": "123 Church Street",
+    "addressLine2": "Your City, ST 00000",
+    "phone": "(000) 000-0000",
+    "email": "info@yourchurch.org",
+    "website": "https://yourchurch.org",
     "services": [
-          {
-                  "day": "Sunday",
-                  "name": "Sunday Morning Worship",
-                  "time": "10:30 AM",
-                  "description": "Uplifting worship, biblical teaching, and children's ministry for all ages."
-          },
-          {
-                  "day": "Wednesday",
-                  "name": "Wednesday Night Family Night",
-                  "time": "7:00 PM",
-                  "description": "In-depth Bible study, prayer, and fellowship. Youth and children's programs available."
-          }
+        {
+            "day": "Sunday",
+            "name": "Sunday Morning Worship",
+            "time": "10:30 AM",
+            "description": "Uplifting worship, biblical teaching, and children's ministry for all ages."
+        },
+        {
+            "day": "Wednesday",
+            "name": "Wednesday Night Family Night",
+            "time": "7:00 PM",
+            "description": "In-depth Bible study, prayer, and fellowship. Youth and children's programs available."
+        }
     ],
     "social": {
-          "facebook": "https://facebook.com/yourpage",
-          "instagram": "https://instagram.com/yourpage",
-          "youtube": "https://youtube.com/@yourchannel"
+        "facebook": "https://facebook.com/yourpage",
+        "instagram": "https://instagram.com/yourpage",
+        "youtube": "https://youtube.com/@yourchannel"
     },
     "giving": {
-          "url": "https://tithe.ly/give",
-          "label": "Give Online"
+        "url": "https://tithe.ly/give",
+        "label": "Give Online"
     },
     "maps": {
-          "embedUrl": "<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d25414.95136920768!2d-93.3370596!3d37.2270865!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x87cf6220450efa2f%3A0x52391a46fbe04e54!2sSpringfield%20Faith%20Assembly%20Of%20God!5e0!3m2!1sen!2sus!4v1775860258640!5m2!1sen!2sus"
+        "embedUrl": "https://www.google.com/maps/embed?pb=YOUR_MAPS_EMBED_URL_HERE"
     },
     "formspree": {
-          "formId": "https://formspree.io/f/maqlrwlr"
+        "formId": "YOUR_FORMSPREE_ID"
     },
     "github": {
-          "owner": "MARCUS7288",
-          "repo": "FAITHAGSPRINGFIELD",
-          "branch": "main"
+        "owner": "marcus7288",
+        "repo": "faithagspringfield",
+        "branch": "main"
     },
     "meta": {
-          "description": "A Spirit-filled church community. Everyone is welcome.",
-          "themeColor": "#1A3A52"
+        "description": "A Spirit-filled church community. Everyone is welcome.",
+        "themeColor": "#1A3A52"
     }
 }
