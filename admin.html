@@ -331,6 +331,9 @@ a{text-decoration:none;color:inherit}
                             <div class="form-group"><label>YouTube URL</label><input type="url" id="cfg-yt" placeholder="https://youtube.com/@yourchannel" oninput="configChanged()"></div>
                             <div class="form-group"><label>Online Giving URL</label><input type="url" id="cfg-give" placeholder="https://tithe.ly/give" oninput="configChanged()"></div>
                         </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Formspree Contact Form URL</label><input type="url" id="cfg-formspree" placeholder="https://formspree.io/f/xxxxxxxx" oninput="configChanged()"><div class="form-hint">Paste your Formspree endpoint URL here. Get one at formspree.io after creating a form.</div></div>
+                        </div>
                         <hr style="border:none;border-top:1px solid #F0F2F5;margin:8px 0 16px">
                         <p style="font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#A0ADB8;margin-bottom:12px">GitHub Publishing Settings</p>
                         <div class="form-row">
@@ -657,6 +660,7 @@ function loadConfigData() {
             f('cfg-ig', c.social && c.social.instagram);
             f('cfg-yt', c.social && c.social.youtube);
             f('cfg-give', c.giving && c.giving.url);
+            f('cfg-formspree', c.formspree && c.formspree.url);
             f('cfg-gh-owner', c.github && c.github.owner);
             f('cfg-gh-repo', c.github && c.github.repo);
             // Update stat
@@ -694,6 +698,9 @@ function getConfigData() {
         giving: {
             url: document.getElementById('cfg-give').value,
             label: 'Give Online'
+        },
+        formspree: {
+            url: document.getElementById('cfg-formspree').value
         },
         maps: configData.maps || {},
         github: {
