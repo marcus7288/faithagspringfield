@@ -4,6 +4,29 @@
 [build]
   publish = "."
 
+# Explicit passthrough rules for JSON data files
+# (must come BEFORE the catch-all rewrite to prevent /*→index.html from intercepting them)
+[[redirects]]
+  from = "/config.json"
+  to = "/config.json"
+  status = 200
+
+[[redirects]]
+  from = "/events.json"
+  to = "/events.json"
+  status = 200
+
+[[redirects]]
+  from = "/announcements.json"
+  to = "/announcements.json"
+  status = 200
+
+[[redirects]]
+  from = "/sermons.json"
+  to = "/sermons.json"
+  status = 200
+
+# Catch-all: serve index.html for any other route (SPA-style)
 [[redirects]]
   from = "/*"
   to = "/index.html"
