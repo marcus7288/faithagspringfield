@@ -451,6 +451,7 @@ function markUnsaved(type) {
     if (type === 'events') { unsavedEvents = true; document.getElementById('events-dot').classList.add('show'); }
     if (type === 'announcement') { unsavedAnnouncement = true; document.getElementById('announcement-dot').classList.add('show'); }
     if (type === 'sermons') { unsavedSermons = true; document.getElementById('sermons-dot').classList.add('show'); }
+    if (type === 'config') { unsavedConfig = true; document.getElementById('config-dot').classList.add('show'); }
     document.getElementById('unsaved-dot').classList.add('show');
 }
 function markAllSaved() {
@@ -666,10 +667,8 @@ function loadConfigData() {
 }
 
 function configChanged() {
-    unsavedConfig = true;
-    document.getElementById('config-dot').classList.add('show');
-    document.getElementById('unsaved-dot').classList.add('show');
-    // Update stat preview
+        markUnsaved('config');
+            // Update stat preview
     const nameEl = document.getElementById('cfg-name');
     const statEl = document.getElementById('stat-config');
     if (statEl && nameEl) statEl.textContent = nameEl.value || 'Not Set';
@@ -709,7 +708,16 @@ function getConfigData() {
 async function publishAll() {
     const token = document.getElementById('gh-token').value || localStorage.getItem('faithag_gh_token') || '';
     if (!token) { setStatus('error', 'Please enter your GitHub token first.'); return; }
-    setStatus('publishing', 'Publishing...');
+    const ownerField = document.getElementById('cfg-gh-owner').value.trim();
+        const repoField = document.getElementById('cfg-gh-repo').value.trim();
+        if (ownerField) GH_OWNER = ownerField;
+        if (repoField) GH_REPO = repoField;
+        if (!GH_OWNER || GH_OWNER === 'YOUR_GITHUB_USERNAME' || !GH_REPO || GH_REPO === 'YOUR_REPO_NAME') {
+            setStatus('error', 'Please set GitHub Username and Repo in Church Settings first.');
+            btn.disabled = false;
+            return;
+        }
+            setStatus('publishing', 'Publishing...');
     const btn = document.getElementById('publish-btn');
     btn.disabled = true;
 
