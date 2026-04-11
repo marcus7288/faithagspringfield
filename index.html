@@ -1141,8 +1141,12 @@
         set('cfg-copy-name', c.churchName);
         set('cfg-copy-year', new Date().getFullYear().toString());
 
-        // About badge
-        if (c.city) set('cfg-est-badge', 'Est. ' + c.city + ', ' + (c.state||''));
+        // About badge — city/state come from addressLine2 (e.g. "Springfield, MO 65803")
+        if (c.addressLine2) {
+            const badgeZip = c.addressLine2.match(/\s(\d{5}(?:-\d{4})?)\s*$/);
+            const badgeCityState = badgeZip ? c.addressLine2.substring(0, badgeZip.index).trim() : c.addressLine2;
+            set('cfg-est-badge', 'Est. ' + badgeCityState);
+        }
 
         // Contact section address & times
         if (c.address) {
