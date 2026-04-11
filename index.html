@@ -1079,15 +1079,18 @@
             set('cfg-s2-time', c.services[1].time);
         }
 
-        // Address
+        // Address — city/state/zip are stored together in addressLine2 (e.g. "Springfield, MO 65803")
         set('cfg-addr-short', c.address);
-        set('cfg-city-state', (c.city||'') + ', ' + (c.state||''));
-        set('cfg-addr-full', (c.address||'') + '\n' + (c.addressLine2||''));
+        const addrLine2 = c.addressLine2 || '';
+        const zipMatch = addrLine2.match(/\s(\d{5}(?:-\d{4})?)\s*$/);
+        const zipStr = zipMatch ? zipMatch[1] : '';
+        const cityStateStr = zipMatch ? addrLine2.substring(0, zipMatch.index).trim() : addrLine2;
+        set('cfg-city-state', cityStateStr || addrLine2);
+        set('cfg-zip', zipStr);
         const fullEl = document.getElementById('cfg-addr-full');
-        if (fullEl && c.address) fullEl.innerHTML = c.address + '<br>' + (c.addressLine2||'');
-        set('cfg-footer-addr', (c.address||'') + '\n' + (c.city||'') + ', ' + (c.state||''));
+        if (fullEl && c.address) fullEl.innerHTML = c.address + '<br>' + addrLine2;
         const footerAddrEl = document.getElementById('cfg-footer-addr');
-        if (footerAddrEl && c.address) footerAddrEl.innerHTML = c.address + '<br>' + (c.city||'') + ', ' + (c.state||'');
+        if (footerAddrEl && c.address) footerAddrEl.innerHTML = c.address + '<br>' + addrLine2;
 
         // Service times string
         if (c.services) {
