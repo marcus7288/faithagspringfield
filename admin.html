@@ -316,6 +316,9 @@ a{text-decoration:none;color:inherit}
                             <div class="form-group"><label>Denomination</label><input type="text" id="cfg-denom" placeholder="Assembly of God" oninput="configChanged()"></div>
                         </div>
                         <div class="form-row">
+                            <div class="form-group"><label>Year Established</label><input type="number" id="cfg-year-est" placeholder="e.g. 1985" min="1700" max="2100" oninput="configChanged()"><div class="form-hint">Displays on the About section badge.</div></div>
+                        </div>
+                        <div class="form-row">
                             <div class="form-group"><label>Street Address</label><input type="text" id="cfg-address" placeholder="123 Main Street" oninput="configChanged()"></div>
                             <div class="form-group"><label>City, State ZIP</label><input type="text" id="cfg-address2" placeholder="Springfield, MO 65802" oninput="configChanged()"></div>
                         </div>
@@ -661,6 +664,7 @@ function loadConfigData() {
             f('cfg-yt', c.social && c.social.youtube);
             f('cfg-give', c.giving && c.giving.url);
             f('cfg-formspree', c.formspree && c.formspree.url);
+            f('cfg-year-est', c.yearEstablished);
             f('cfg-gh-owner', c.github && c.github.owner);
             f('cfg-gh-repo', c.github && c.github.repo);
             // Update stat
@@ -684,6 +688,7 @@ function getConfigData() {
         churchShortName: document.getElementById('cfg-short').value,
         tagline: document.getElementById('cfg-tagline').value,
         denomination: document.getElementById('cfg-denom').value,
+        yearEstablished: document.getElementById('cfg-year-est').value,
         address: document.getElementById('cfg-address').value,
         addressLine2: document.getElementById('cfg-address2').value,
         phone: document.getElementById('cfg-phone').value,
