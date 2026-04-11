@@ -178,7 +178,9 @@
             position: relative; z-index: 2;
             text-align: center;
             padding: 40px 24px;
+            padding-top: 120px;
             max-width: 800px;
+            margin-top: 10vh;
         }
         .hero-logo { height: 80px; width: auto; margin: 0 auto 28px; }
         .hero h1 {
@@ -606,7 +608,7 @@
             .hero-service-strip { flex-wrap: wrap; }
             .hero-strip-item { padding: 12px 24px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); width: 50%; }
             /* 4 strip items at 50% = 2 rows + stacked buttons need extra clearance */
-            .hero-content { padding-bottom: 280px; }
+            .hero-content { padding-top: 100px; margin-top: 0; padding-bottom: 300px; }
             .hero-cta { flex-direction: column; align-items: center; gap: 14px; }
             .hero-cta .btn { width: 260px; justify-content: center; padding: 16px 24px; font-size: 1rem; }
             .footer-grid { grid-template-columns: 1fr; gap: 28px; }
@@ -615,7 +617,7 @@
         }
         @media (max-width: 480px) {
             /* 4 strip items at 100% = 4 rows; need more room above the strip */
-            .hero-content { padding-bottom: 360px; }
+            .hero-content { padding-top: 90px; margin-top: 0; padding-bottom: 380px; }
             .hero-cta .btn { width: 100%; max-width: 320px; }
             .hero-strip-item { width: 100%; }
             .services-grid, .events-grid, .ministries-grid { grid-template-columns: 1fr; }
