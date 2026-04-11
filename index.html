@@ -251,6 +251,7 @@
 
         /* ===== SECTIONS ===== */
         section { width: 100%; }
+        section { scroll-margin-top: 70px; }
         .section-inner { max-width: 1200px; margin: 0 auto; padding: 96px 32px; }
         .section-inner.tight { padding: 72px 32px; }
         .alt-bg { background: var(--cream-dark); }
@@ -604,6 +605,7 @@
             .nav-hamburger { display: flex; }
             .hero-service-strip { flex-wrap: wrap; }
             .hero-strip-item { padding: 12px 24px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); width: 50%; }
+            .hero-content { padding-bottom: 160px; }
             .footer-grid { grid-template-columns: 1fr; gap: 28px; }
             .form-row { grid-template-columns: 1fr; }
             .give-inner { flex-direction: column; text-align: center; }
@@ -956,22 +958,26 @@
                 </div>
                 <div class="contact-form fade-in-right">
                     <h3>Send a Message</h3>
-                    <div class="form-row">
-                        <div class="form-group"><label>First Name</label><input type="text" placeholder="John"></div>
-                        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
-                    </div>
-                    <div class="form-group"><label>Email</label><input type="email" placeholder="john@example.com"></div>
-                    <div class="form-group"><label>Subject</label>
-                        <select>
-                            <option>General Inquiry</option>
-                            <option>Prayer Request</option>
-                            <option>Plan a Visit</option>
-                            <option>Ministries</option>
-                            <option>Other</option>
-                        </select>
-                    </div>
-                    <div class="form-group"><label>Message</label><textarea placeholder="How can we help?"></textarea></div>
-                    <button class="btn btn-sage" style="width:100%;justify-content:center;" onclick="alert('Thank you! We will be in touch soon.')"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                    <form id="contact-form" method="POST" action="">
+                        <div class="form-row">
+                            <div class="form-group"><label>First Name</label><input type="text" name="firstName" placeholder="John" required></div>
+                            <div class="form-group"><label>Last Name</label><input type="text" name="lastName" placeholder="Smith"></div>
+                        </div>
+                        <div class="form-group"><label>Email</label><input type="email" name="_replyto" placeholder="john@example.com" required></div>
+                        <div class="form-group"><label>Subject</label>
+                            <select name="subject">
+                                <option>General Inquiry</option>
+                                <option>Prayer Request</option>
+                                <option>First Time Visitor</option>
+                                <option>Volunteer Interest</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Message</label><textarea name="message" placeholder="How can we help?" required></textarea></div>
+                        <input type="hidden" name="_subject" value="New message from church website">
+                        <div id="contact-form-status" style="display:none;padding:12px;border-radius:8px;margin-bottom:12px;font-size:0.88rem;"></div>
+                        <button type="submit" class="btn btn-sage" style="width:100%;justify-content:center;" id="contact-submit-btn"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -1155,6 +1161,11 @@
             const faEl = document.getElementById('cfg-footer-addr');
             if (faEl) faEl.innerHTML = (c.address||'') + '<br>' + (c.city||'') + ', ' + (c.state||'');
         }
+        // Set Formspree contact form action
+        if (c.formspree && c.formspree.url) {
+            const cf = document.getElementById('contact-form');
+            if (cf) cf.action = c.formspree.url;
+        }
     }
 
     function loadConfig() {
@@ -1179,6 +1190,66 @@
             .catch(() => {});
     }
     loadAnnouncement();
+
+    // ===== CONTACT FORM AJAX SUBMISSION =====
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const statusEl = document.getElementById('contact-form-status');
+            const submitBtn = document.getElementById('contact-submit-btn');
+            const formAction = contactForm.action;
+
+            if (!formAction || !formAction.includes('formspree')) {
+                statusEl.textContent = 'Contact form is not configured yet. Please try again later.';
+                statusEl.style.display = 'block';
+                statusEl.style.background = '#FDEDEC';
+                statusEl.style.color = '#922B21';
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+            try {
+                const data = new FormData(contactForm);
+                const res = await fetch(formAction, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (res.ok) {
+                    statusEl.textContent = 'Thank you! Your message has been sent. We will be in touch soon.';
+                    statusEl.style.background = '#E8F8E8';
+                    statusEl.style.color = '#1E8449';
+                    statusEl.style.display = 'block';
+                    contactForm.reset();
+                    submitBtn.innerHTML = '<i class="fa-solid fa-check"></i> Sent!';
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+                        statusEl.style.display = 'none';
+                    }, 5000);
+                } else {
+                    const resData = await res.json();
+                    statusEl.textContent = resData.errors ? resData.errors.map(e => e.message).join(', ') : 'There was a problem sending your message. Please try again.';
+                    statusEl.style.background = '#FDEDEC';
+                    statusEl.style.color = '#922B21';
+                    statusEl.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+                }
+            } catch (err) {
+                statusEl.textContent = 'There was a problem sending your message. Please try again.';
+                statusEl.style.background = '#FDEDEC';
+                statusEl.style.color = '#922B21';
+                statusEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Send Message';
+            }
+        });
+    }
 
     // ===== EVENTS =====
     function loadEvents() {
