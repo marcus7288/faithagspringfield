@@ -702,7 +702,7 @@
                         <i class="fa-solid fa-church placeholder-icon"></i>
                     </div>
                     <div class="about-badge">
-                        <div class="badge-num">2026</div>
+                        <div class="badge-num" id="cfg-badge-year">2026</div>
                         <div class="badge-label" id="cfg-est-badge">Est. Your City, MO</div>
                     </div>
                 </div>
@@ -1143,7 +1143,8 @@
         set('cfg-copy-name', c.churchName);
         set('cfg-copy-year', new Date().getFullYear().toString());
 
-        // About badge — city/state come from addressLine2 (e.g. "Springfield, MO 65803")
+        // About badge — year from yearEstablished; city/state from addressLine2
+        if (c.yearEstablished) set('cfg-badge-year', c.yearEstablished);
         if (c.addressLine2) {
             const badgeZip = c.addressLine2.match(/\s(\d{5}(?:-\d{4})?)\s*$/);
             const badgeCityState = badgeZip ? c.addressLine2.substring(0, badgeZip.index).trim() : c.addressLine2;
