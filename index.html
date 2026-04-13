@@ -1174,7 +1174,7 @@
         }
         if (c.address) {
             const faEl = document.getElementById('cfg-footer-addr');
-            if (faEl) faEl.innerHTML = (c.address||'') + '<br>' + (c.city||'') + ', ' + (c.state||'');
+            if (faEl) faEl.innerHTML = (c.address||'') + '<br>' + (c.addressLine2||'');
         }
         // Set Formspree contact form action
         if (c.formspree && c.formspree.url) {
