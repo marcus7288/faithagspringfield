@@ -202,8 +202,12 @@ a{text-decoration:none;color:inherit}
                     <i class="fa-solid fa-gear"></i> Church Settings
                     <span class="unsaved-dot" id="config-dot"></span>
                 </button>
+                <button class="sidebar-link" onclick="switchTab('theme', this)">
+                    <i class="fa-solid fa-palette"></i> Theme Colors
+                    <span class="unsaved-dot" id="theme-dot"></span>
+                </button>
                 <button class="sidebar-link" onclick="switchTab('password', this)">
-                    <i class="fa-solid fa-key"></i> Change Password
+                    <i class="fa-solid fa-key"></i> Staff Login Info
                 </button>
             </div>
         </div>
@@ -340,6 +344,88 @@ a{text-decoration:none;color:inherit}
                 </div>
             </div>
 
+            <!-- THEME TAB -->
+            <div id="tab-theme" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header"><div><h2>Theme Colors</h2><p>Customize your website's color scheme.</p></div></div>
+                    <div class="card-body">
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px">
+                            <div class="form-group">
+                                <label>Primary Color</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-primary" value="#1A3A52" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-primary-hex" value="#1A3A52" style="flex:1;font-family:monospace" oninput="syncColorFromHex('primary');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Main navigation, buttons, footer</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Primary Light</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-primaryLight" value="#2C4A65" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-primaryLight-hex" value="#2C4A65" style="flex:1;font-family:monospace" oninput="syncColorFromHex('primaryLight');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Hover states, gradients</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Accent Color</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-accent" value="#69B76E" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-accent-hex" value="#69B76E" style="flex:1;font-family:monospace" oninput="syncColorFromHex('accent');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Section headings, highlights</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Secondary Color</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-secondary" value="#C8A96E" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-secondary-hex" value="#C8A96E" style="flex:1;font-family:monospace" oninput="syncColorFromHex('secondary');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Call-to-action buttons, accents</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Secondary Light</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-secondaryLight" value="#E5D4A6" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-secondaryLight-hex" value="#E5D4A6" style="flex:1;font-family:monospace" oninput="syncColorFromHex('secondaryLight');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Hover states, subtle accents</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Background Color</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-background" value="#FAF7F2" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-background-hex" value="#FAF7F2" style="flex:1;font-family:monospace" oninput="syncColorFromHex('background');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Page background</p>
+                            </div>
+                            <div class="form-group">
+                                <label>Text Color</label>
+                                <div style="display:flex;align-items:center;gap:10px">
+                                    <input type="color" id="theme-text" value="#1A2332" style="width:50px;height:38px;padding:2px;border:1px solid #D8CFC4;border-radius:6px;cursor:pointer" oninput="updateThemePreview();markUnsaved('theme')">
+                                    <input type="text" id="theme-text-hex" value="#1A2332" style="flex:1;font-family:monospace" oninput="syncColorFromHex('text');markUnsaved('theme')">
+                                </div>
+                                <p class="form-hint">Main body text</p>
+                            </div>
+                        </div>
+                        <div style="margin-top:24px;padding:20px;background:#F7F9FC;border-radius:8px">
+                            <p style="font-size:0.85rem;font-weight:600;color:#3D5166;margin-bottom:12px"><i class="fa-solid fa-eye"></i> Preview</p>
+                            <div id="theme-preview" style="display:flex;gap:8px;flex-wrap:wrap">
+                                <div id="preview-primary" style="width:60px;height:40px;border-radius:6px;background:#1A3A52"></div>
+                                <div id="preview-primaryLight" style="width:60px;height:40px;border-radius:6px;background:#2C4A65"></div>
+                                <div id="preview-accent" style="width:60px;height:40px;border-radius:6px;background:#69B76E"></div>
+                                <div id="preview-secondary" style="width:60px;height:40px;border-radius:6px;background:#C8A96E"></div>
+                                <div id="preview-secondaryLight" style="width:60px;height:40px;border-radius:6px;background:#E5D4A6"></div>
+                                <div id="preview-background" style="width:60px;height:40px;border-radius:6px;background:#FAF7F2;border:1px solid #D8CFC4"></div>
+                                <div id="preview-text" style="width:60px;height:40px;border-radius:6px;background:#1A2332"></div>
+                            </div>
+                        </div>
+                        <div style="margin-top:20px;display:flex;gap:12px">
+                            <button class="btn btn-outline" onclick="resetThemeDefaults()"><i class="fa-solid fa-rotate-left"></i> Reset to Defaults</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- PASSWORD TAB -->
             <div id="tab-password" class="tab-pane">
                 <div class="content-card">
@@ -427,16 +513,17 @@ function switchTab(name, btn) {
 
 
 // ===== UNSAVED =====
-let unsavedEvents = false, unsavedAnnouncement = false, unsavedSermons = false;
+let unsavedEvents = false, unsavedAnnouncement = false, unsavedSermons = false, unsavedTheme = false;
 function markUnsaved(type) {
     if (type === 'events') { unsavedEvents = true; document.getElementById('events-dot').classList.add('show'); }
     if (type === 'announcement') { unsavedAnnouncement = true; document.getElementById('announcement-dot').classList.add('show'); }
     if (type === 'sermons') { unsavedSermons = true; document.getElementById('sermons-dot').classList.add('show'); }
     if (type === 'config') { unsavedConfig = true; document.getElementById('config-dot').classList.add('show'); }
+    if (type === 'theme') { unsavedTheme = true; document.getElementById('theme-dot').classList.add('show'); }
     document.getElementById('unsaved-dot').classList.add('show');
 }
 function markAllSaved() {
-    unsavedEvents = false; unsavedAnnouncement = false; unsavedSermons = false; unsavedConfig = false;
+    unsavedEvents = false; unsavedAnnouncement = false; unsavedSermons = false; unsavedConfig = false; unsavedTheme = false;
     document.querySelectorAll('.unsaved-dot').forEach(d => d.classList.remove('show'));
 }
 
@@ -642,6 +729,8 @@ function loadConfigData() {
             f('cfg-year-est', c.yearEstablished);
             f('cfg-gh-owner', c.github && c.github.owner);
             f('cfg-gh-repo', c.github && c.github.repo);
+            // Load theme colors
+            if (c.theme) loadTheme(c.theme);
             // Update stat
             const statEl = document.getElementById('stat-config');
             if (statEl) statEl.textContent = c.churchName || 'Not Set';
@@ -688,8 +777,65 @@ function getConfigData() {
             repo: document.getElementById('cfg-gh-repo').value,
             branch: GH_BRANCH
         },
-        meta: configData.meta || {}
+        meta: configData.meta || {},
+        theme: getThemeData()
     };
+}
+
+// ===== THEME =====
+const defaultTheme = {
+    primary: '#1A3A52',
+    primaryLight: '#2C4A65',
+    accent: '#69B76E',
+    secondary: '#C8A96E',
+    secondaryLight: '#E5D4A6',
+    background: '#FAF7F2',
+    text: '#1A2332'
+};
+
+function getThemeData() {
+    return {
+        primary: document.getElementById('theme-primary').value,
+        primaryLight: document.getElementById('theme-primaryLight').value,
+        accent: document.getElementById('theme-accent').value,
+        secondary: document.getElementById('theme-secondary').value,
+        secondaryLight: document.getElementById('theme-secondaryLight').value,
+        background: document.getElementById('theme-background').value,
+        text: document.getElementById('theme-text').value
+    };
+}
+
+function loadTheme(theme) {
+    const t = theme || defaultTheme;
+    const fields = ['primary', 'primaryLight', 'accent', 'secondary', 'secondaryLight', 'background', 'text'];
+    fields.forEach(field => {
+        const val = t[field] || defaultTheme[field];
+        document.getElementById('theme-' + field).value = val;
+        document.getElementById('theme-' + field + '-hex').value = val;
+        document.getElementById('preview-' + field).style.background = val;
+    });
+}
+
+function syncColorFromHex(field) {
+    const hex = document.getElementById('theme-' + field + '-hex').value;
+    if (/^#[0-9A-Fa-f]{6}$/.test(hex)) {
+        document.getElementById('theme-' + field).value = hex;
+        updateThemePreview();
+    }
+}
+
+function updateThemePreview() {
+    const fields = ['primary', 'primaryLight', 'accent', 'secondary', 'secondaryLight', 'background', 'text'];
+    fields.forEach(field => {
+        const val = document.getElementById('theme-' + field).value;
+        document.getElementById('theme-' + field + '-hex').value = val;
+        document.getElementById('preview-' + field).style.background = val;
+    });
+}
+
+function resetThemeDefaults() {
+    loadTheme(defaultTheme);
+    markUnsaved('theme');
 }
 // ===== PUBLISH ALL =====
 async function publishAll() {

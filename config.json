@@ -46,5 +46,14 @@
   "meta": {
     "description": "A Spirit-filled church community. Everyone is welcome.",
     "themeColor": "#1A3A52"
+  },
+  "theme": {
+    "primary": "#1A3A52",
+    "primaryLight": "#2C4A65",
+    "accent": "#69B76E",
+    "secondary": "#C8A96E",
+    "secondaryLight": "#E5D4A6",
+    "background": "#FAF7F2",
+    "text": "#1A2332"
   }
 }
