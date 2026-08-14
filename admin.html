@@ -43,7 +43,7 @@ a{text-decoration:none;color:inherit}
 
 /* TABS */
 .admin-body{display:flex;flex:1}
-.admin-sidebar{width:220px;background:#fff;border-right:1px solid #E5E9EE;padding:20px 0;flex-shrink:0}
+.admin-sidebar{width:220px;background:#fff;border-right:1px solid #E5E9EE;padding:20px 0;flex-shrink:0;display:flex;flex-direction:column}
 .sidebar-section{padding:0 16px;margin-bottom:6px}
 .sidebar-section-label{font-size:0.7rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#A0ADB8;padding:0 8px;margin-bottom:4px}
 .sidebar-link{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;color:#3D5166;font-size:0.88rem;font-weight:500;cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left}
@@ -208,6 +208,11 @@ a{text-decoration:none;color:inherit}
                 </button>
                 <button class="sidebar-link" onclick="switchTab('password', this)">
                     <i class="fa-solid fa-key"></i> Staff Login Info
+                </button>
+            </div>
+            <div class="sidebar-section" style="margin-top:auto;padding-top:20px;border-top:1px solid #E5E9EE">
+                <button class="sidebar-link" onclick="switchTab('onboarding', this)" style="color:#27AE60">
+                    <i class="fa-solid fa-circle-question"></i> Setup Guide
                 </button>
             </div>
         </div>
@@ -437,6 +442,96 @@ a{text-decoration:none;color:inherit}
                         </div>
                         <div class="info-box" style="background:#FFF8E6;border:1px solid #F39C12;border-radius:8px;padding:16px">
                             <p style="font-size:0.82rem;color:#8B6914"><i class="fa-solid fa-triangle-exclamation"></i> <strong>To change the password:</strong> Edit the <code>STAFF_PASSWORD</code> value in admin.html via GitHub. Only share the password with trusted staff members.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ONBOARDING TAB -->
+            <div id="tab-onboarding" class="tab-pane">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div>
+                            <h2><i class="fa-solid fa-rocket" style="color:#27AE60"></i> Getting Started</h2>
+                            <p>Welcome! Follow these steps to set up your church website.</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div style="display:grid;gap:20px">
+                            <!-- Step 1 -->
+                            <div style="display:flex;gap:16px;padding:20px;background:#F7F9FC;border-radius:10px;border-left:4px solid #27AE60">
+                                <div style="width:36px;height:36px;background:#27AE60;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">1</div>
+                                <div>
+                                    <h3 style="font-size:1rem;color:#1A2332;margin-bottom:6px">Set Up Church Information</h3>
+                                    <p style="font-size:0.88rem;color:#6B8090;margin-bottom:10px">Go to <strong>Church Settings</strong> and enter your church name, address, phone, email, and social media links.</p>
+                                    <button class="btn btn-sm btn-outline" onclick="switchTab('config', document.querySelector('[onclick*=\"config\"]'))"><i class="fa-solid fa-gear"></i> Go to Church Settings</button>
+                                </div>
+                            </div>
+                            <!-- Step 2 -->
+                            <div style="display:flex;gap:16px;padding:20px;background:#F7F9FC;border-radius:10px;border-left:4px solid #3498DB">
+                                <div style="width:36px;height:36px;background:#3498DB;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">2</div>
+                                <div>
+                                    <h3 style="font-size:1rem;color:#1A2332;margin-bottom:6px">Customize Your Colors</h3>
+                                    <p style="font-size:0.88rem;color:#6B8090;margin-bottom:10px">Match your website to your church's branding by customizing the theme colors.</p>
+                                    <button class="btn btn-sm btn-outline" onclick="switchTab('theme', document.querySelector('[onclick*=\"theme\"]'))"><i class="fa-solid fa-palette"></i> Go to Theme Colors</button>
+                                </div>
+                            </div>
+                            <!-- Step 3 -->
+                            <div style="display:flex;gap:16px;padding:20px;background:#F7F9FC;border-radius:10px;border-left:4px solid #9B59B6">
+                                <div style="width:36px;height:36px;background:#9B59B6;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">3</div>
+                                <div>
+                                    <h3 style="font-size:1rem;color:#1A2332;margin-bottom:6px">Add Your Events</h3>
+                                    <p style="font-size:0.88rem;color:#6B8090;margin-bottom:10px">Add upcoming services, events, and special gatherings to keep your congregation informed.</p>
+                                    <button class="btn btn-sm btn-outline" onclick="switchTab('events', document.querySelector('[onclick*=\"events\"]'))"><i class="fa-regular fa-calendar"></i> Go to Events</button>
+                                </div>
+                            </div>
+                            <!-- Step 4 -->
+                            <div style="display:flex;gap:16px;padding:20px;background:#F7F9FC;border-radius:10px;border-left:4px solid #E67E22">
+                                <div style="width:36px;height:36px;background:#E67E22;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">4</div>
+                                <div>
+                                    <h3 style="font-size:1rem;color:#1A2332;margin-bottom:6px">Feature Your Sermons</h3>
+                                    <p style="font-size:0.88rem;color:#6B8090;margin-bottom:10px">Add your latest sermon with a YouTube video embed to share your messages online.</p>
+                                    <button class="btn btn-sm btn-outline" onclick="switchTab('sermons', document.querySelector('[onclick*=\"sermons\"]'))"><i class="fa-brands fa-youtube"></i> Go to Sermons</button>
+                                </div>
+                            </div>
+                            <!-- Step 5 -->
+                            <div style="display:flex;gap:16px;padding:20px;background:#F7F9FC;border-radius:10px;border-left:4px solid #E74C3C">
+                                <div style="width:36px;height:36px;background:#E74C3C;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">5</div>
+                                <div>
+                                    <h3 style="font-size:1rem;color:#1A2332;margin-bottom:6px">Publish Your Changes</h3>
+                                    <p style="font-size:0.88rem;color:#6B8090;margin-bottom:10px">Click the green <strong>"Save & Publish All"</strong> button at the top to push your changes live. Your site updates in about 30-60 seconds.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Staff Quick Reference -->
+                <div class="content-card" style="margin-top:24px">
+                    <div class="card-header">
+                        <div>
+                            <h2><i class="fa-solid fa-book-open" style="color:#3498DB"></i> Staff Quick Reference</h2>
+                            <p>Common tasks for managing your website</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+                            <div style="padding:16px;background:#EBF5FB;border-radius:8px">
+                                <h4 style="font-size:0.9rem;color:#1A3A52;margin-bottom:8px"><i class="fa-solid fa-bullhorn"></i> Announcement Banner</h4>
+                                <p style="font-size:0.82rem;color:#6B8090">Use the Announcement tab to display urgent messages at the top of your website. Toggle it on/off as needed.</p>
+                            </div>
+                            <div style="padding:16px;background:#E8F8E8;border-radius:8px">
+                                <h4 style="font-size:0.9rem;color:#27AE60;margin-bottom:8px"><i class="fa-regular fa-calendar-plus"></i> Adding Events</h4>
+                                <p style="font-size:0.82rem;color:#6B8090">Click "+ Add Event" to create new events. Include title, date, time, and description. Events auto-sort by date.</p>
+                            </div>
+                            <div style="padding:16px;background:#FEF9E7;border-radius:8px">
+                                <h4 style="font-size:0.9rem;color:#9A7B0A;margin-bottom:8px"><i class="fa-solid fa-video"></i> Updating Sermons</h4>
+                                <p style="font-size:0.82rem;color:#6B8090">Paste YouTube video URLs in the Sermons tab. The video will automatically embed on your site.</p>
+                            </div>
+                            <div style="padding:16px;background:#FDEDEC;border-radius:8px">
+                                <h4 style="font-size:0.9rem;color:#922B21;margin-bottom:8px"><i class="fa-solid fa-circle-exclamation"></i> Remember to Publish</h4>
+                                <p style="font-size:0.82rem;color:#6B8090">Changes are not live until you click "Save & Publish All". Look for the red dot indicating unsaved changes.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
