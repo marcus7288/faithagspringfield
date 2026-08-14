@@ -751,10 +751,10 @@ function setStatus(type, msg) {
 
 // ===== INIT =====
 function initAdmin() {
-    const saved = localStorage.getItem('faithag_gh_token') || '';
-    if (saved) {
-        document.getElementById('gh-token').value = saved;
-        document.getElementById('token-saved-badge').style.display = 'flex';
+    // Display the current password in the Staff Login Info tab
+    const pwDisplay = document.getElementById('current-pw-display');
+    if (pwDisplay) {
+        pwDisplay.textContent = STAFF_PASSWORD;
     }
     loadEvents();
     loadAnnouncement();

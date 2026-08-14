@@ -26,7 +26,24 @@ exports.handler = async (event) => {
     const results = [];
     const ghBranch = branch || 'main';
 
+    // Validate owner/repo format to prevent injection
+    const validNamePattern = /^[a-zA-Z0-9_.-]+$/;
+    if (!validNamePattern.test(owner) || !validNamePattern.test(repo)) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Invalid owner or repo format' })
+      };
+    }
+
+    // Allowed file paths - only permit specific JSON files
+    const allowedPaths = ['events.json', 'announcements.json', 'sermons.json', 'config.json'];
+
     for (const file of files) {
+      // Validate file path is in allowlist (prevents path traversal)
+      if (!allowedPaths.includes(file.path)) {
+        results.push({ path: file.path, success: false, error: 'File path not allowed' });
+        continue;
+      }
       // Get current file SHA (needed for updates)
       const shaRes = await fetch(
         `https://api.github.com/repos/${owner}/${repo}/contents/${file.path}?ref=${ghBranch}`,
