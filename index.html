@@ -11,26 +11,31 @@
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
-            --navy: #1A3A52;
-            --navy-dark: #122840;
-            --navy-light: #2C4A65;
-            --sage: #69B76E;
-            --sage-dark: #4E9A54;
-            --gold: #C8A96E;
-            --gold-light: #E5D4A6;
-            --cream: #FAF7F2;
-            --cream-dark: #F0EAE0;
-            --white: #FFFFFF;
-            --text-dark: #1A2332;
-            --text-mid: #3D5166;
-            --text-light: #6B8090;
-            --border: #D8CFC4;
-            --shadow-sm: 0 2px 8px rgba(26,58,82,0.08);
-            --shadow-md: 0 4px 20px rgba(26,58,82,0.12);
-            --shadow-lg: 0 8px 40px rgba(26,58,82,0.18);
-            --radius-sm: 6px;
+            --sky: #9ec4d7;
+            --sky-dark: #7ab0c8;
+            --sky-light: #c5dde8;
+            --accent: #9ec4d7;
+            --accent-dark: #7ab0c8;
+            --navy: #000000;
+            --navy-dark: #000000;
+            --navy-light: #1a1a1a;
+            --sage: #9ec4d7;
+            --sage-dark: #7ab0c8;
+            --gold: #000000;
+            --gold-light: #333333;
+            --cream: #ffffff;
+            --cream-dark: #f5f7f9;
+            --white: #ffffff;
+            --text-dark: #000000;
+            --text-mid: #333333;
+            --text-light: #666666;
+            --border: #e0e5e9;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --radius-sm: 8px;
             --radius-md: 12px;
-            --radius-lg: 20px;
+            --radius-lg: 24px;
             --transition: all 0.3s ease;
         }
 
@@ -77,7 +82,7 @@
             transition: background 0.35s ease, box-shadow 0.35s ease, top 0.3s ease;
         }
         #main-nav.scrolled {
-            background: rgba(18, 40, 64, 0.97);
+            background: rgba(0, 0, 0, 0.95);
             box-shadow: 0 2px 20px rgba(0,0,0,0.25);
             backdrop-filter: blur(8px);
         }
@@ -143,7 +148,7 @@
         .mobile-menu {
             display: none;
             position: fixed; top: 70px; left: 0; right: 0;
-            background: rgba(18,40,64,0.98);
+            background: rgba(0,0,0,0.95);
             padding: 16px 24px 24px;
             z-index: 99;
         }
@@ -163,11 +168,11 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            background: linear-gradient(135deg, #1A3A52 0%, #2C4A65 50%, #3D5A73 100%);
+            background: linear-gradient(180deg, #9ec4d7 0%, #c5dde8 100%);
         }
         .hero-bg-overlay {
             position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(18,40,64,0.55) 0%, rgba(18,40,64,0.65) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.5) 100%);
             z-index: 1;
         }
         .hero-photo-hint {
@@ -187,20 +192,20 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2rem, 4vw, 3.5rem);
             font-weight: 600;
-            color: var(--white);
+            color: var(--text-dark);
             line-height: 1.15;
             margin-bottom: 16px;
         }
         .hero-divider {
             width: 60px; height: 2px;
-            background: var(--gold);
+            background: var(--text-dark);
             margin: 0 auto 20px;
         }
         .hero-tagline {
             font-size: clamp(0.85rem, 1.5vw, 1rem);
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            color: var(--gold-light);
+            color: var(--text-mid);
             margin-bottom: 40px;
             font-weight: 400;
         }
@@ -209,7 +214,7 @@
             position: absolute;
             bottom: 0; left: 0; right: 0;
             z-index: 2;
-            background: rgba(18,40,64,0.88);
+            background: rgba(0,0,0,0.85);
             backdrop-filter: blur(8px);
             display: flex;
             justify-content: center;
@@ -224,7 +229,7 @@
         .hero-strip-item:last-child { border-right: none; }
         .hero-strip-item .strip-label {
             font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--gold-light); margin-bottom: 4px;
+            color: var(--sky); margin-bottom: 4px;
         }
         .hero-strip-item .strip-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; }
         .scroll-arrow {
@@ -237,16 +242,16 @@
         /* ===== BUTTONS ===== */
         .btn {
             display: inline-flex; align-items: center; gap: 8px;
-            padding: 14px 32px; border-radius: 4px;
+            padding: 14px 32px; border-radius: 50px;
             font-size: 0.88rem; font-weight: 600;
-            letter-spacing: 0.08em; text-transform: uppercase;
+            letter-spacing: 0.06em; text-transform: uppercase;
             cursor: pointer; border: none; transition: var(--transition);
         }
-        .btn-primary { background: var(--gold); color: var(--navy-dark); }
-        .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .btn-secondary { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.7); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.12); border-color: var(--white); }
-        .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); border-radius: 4px; }
+        .btn-primary { background: var(--navy); color: var(--white); }
+        .btn-primary:hover { background: var(--white); color: var(--navy); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .btn-secondary { background: var(--white); color: var(--navy); border: 2px solid var(--navy); }
+        .btn-secondary:hover { background: var(--navy); color: var(--white); }
+        .btn-outline { background: transparent; color: var(--navy); border: 2px solid var(--navy); border-radius: 50px; }
         .btn-outline:hover { background: var(--navy); color: var(--white); }
         .btn-sage { background: var(--sage); color: var(--white); }
         .btn-sage:hover { background: var(--sage-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
@@ -342,22 +347,22 @@
         .service-card:nth-child(3) { border-left-color: var(--navy); }
         .service-icon {
             width: 52px; height: 52px;
-            background: rgba(105,183,110,0.12);
+            background: rgba(158,196,215,0.15);
             border-radius: var(--radius-md);
             display: flex; align-items: center; justify-content: center;
             font-size: 1.4rem; color: var(--sage);
             margin-bottom: 20px;
         }
         .service-card:nth-child(2) .service-icon { background: rgba(200,169,110,0.12); color: var(--gold); }
-        .service-card:nth-child(3) .service-icon { background: rgba(26,58,82,0.1); color: var(--navy); }
+        .service-card:nth-child(3) .service-icon { background: rgba(0,0,0,0.08); color: var(--navy); }
         .service-time-badge {
             display: inline-flex; align-items: center; gap: 6px;
-            background: rgba(105,183,110,0.1); color: var(--sage-dark);
+            background: rgba(158,196,215,0.12); color: var(--sage-dark);
             font-size: 0.82rem; font-weight: 600; padding: 4px 12px;
             border-radius: 20px; margin-bottom: 12px;
         }
         .service-card:nth-child(2) .service-time-badge { background: rgba(200,169,110,0.12); color: var(--gold); }
-        .service-card:nth-child(3) .service-time-badge { background: rgba(26,58,82,0.08); color: var(--navy); }
+        .service-card:nth-child(3) .service-time-badge { background: rgba(0,0,0,0.06); color: var(--navy); }
         .service-name { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; color: var(--text-dark); margin-bottom: 12px; }
         .service-desc { color: var(--text-light); font-size: 0.95rem; line-height: 1.7; flex: 1; }
 
@@ -451,10 +456,10 @@
             display: inline-flex; align-items: center; gap: 5px;
             font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
             padding: 4px 10px; border-radius: 20px; margin-bottom: 12px;
-            background: rgba(105,183,110,0.1); color: var(--sage-dark);
+            background: rgba(158,196,215,0.12); color: var(--sage-dark);
         }
         .event-card[data-category="Special"] .event-category-badge { background: rgba(200,169,110,0.12); color: #9B7A3A; }
-        .event-card[data-category="Bible Study"] .event-category-badge { background: rgba(26,58,82,0.08); color: var(--navy); }
+        .event-card[data-category="Bible Study"] .event-category-badge { background: rgba(0,0,0,0.06); color: var(--navy); }
         .event-card[data-category="Outreach"] .event-category-badge { background: rgba(224,123,84,0.1); color: #C05A2C; }
         .event-card[data-category="Youth"] .event-category-badge { background: rgba(123,110,229,0.1); color: #5A4DB8; }
         .event-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--text-dark); margin-bottom: 8px; line-height: 1.3; }
