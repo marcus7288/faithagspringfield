@@ -1,8 +1,9 @@
 # netlify.toml
-# Static HTML site - no build command needed
+# Static HTML site with Netlify Functions for admin publishing
 
 [build]
   publish = "."
+  functions = "netlify/functions"
 
 # Explicit passthrough rules for JSON data files
 # (must come BEFORE the catch-all rewrite to prevent /*→index.html from intercepting them)

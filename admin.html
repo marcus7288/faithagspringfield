@@ -36,16 +36,10 @@ a{text-decoration:none;color:inherit}
 
 /* PUBLISH BAR */
 .publish-bar{background:#1a472a;padding:12px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:2px solid #145222}
-.publish-bar label{color:#d4edda;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
-.token-input{flex:1;min-width:220px;max-width:420px;padding:8px 12px;border:1.5px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem}
-.token-input::placeholder{color:rgba(255,255,255,0.4)}
-.token-input:focus{outline:none;border-color:rgba(255,255,255,0.5)}
-.token-saved{font-size:0.75rem;color:#7bcf8b;display:none;align-items:center;gap:4px}
-#publish-status{font-size:0.8rem;color:rgba(255,255,255,0.7);min-width:140px}
+#publish-status{font-size:0.8rem;color:rgba(255,255,255,0.7);margin-left:16px}
 #publish-status.success{color:#7bcf8b}
 #publish-status.error{color:#f08080}
 #publish-status.publishing{color:#ffd700}
-.token-setup-link{color:rgba(255,255,255,0.5);font-size:0.75rem;text-decoration:underline;cursor:pointer;white-space:nowrap}
 
 /* TABS */
 .admin-body{display:flex;flex:1}
@@ -153,7 +147,7 @@ a{text-decoration:none;color:inherit}
     <img src="logo 2.png" alt="Faith AG" class="login-logo">
     <h1>Staff Admin Panel</h1>
     <p>Faith Assembly of God</p>
-    <input type="password" id="password-input" class="login-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" id="password-input" class="login-input" placeholder="Enter staff password" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()"><i class="fa-solid fa-lock-open"></i> Sign In</button>
     <p class="login-error" id="login-error">Incorrect password. Please try again.</p>
 </div>
@@ -176,15 +170,11 @@ a{text-decoration:none;color:inherit}
 
     <!-- Publish Bar -->
     <div class="publish-bar">
-        <label><i class="fa-brands fa-github"></i> GitHub Token</label>
-        <input type="password" id="gh-token" class="token-input" placeholder="ghp_xxxx... (saved in browser)" oninput="onTokenInput(this.value)">
-        <span class="token-saved" id="token-saved-badge"><i class="fa-solid fa-check"></i> Saved</span>
         <button class="btn btn-publish" id="publish-btn" onclick="publishAll()">
             <span id="unsaved-dot" class="unsaved-dot show"></span>
             <i class="fa-solid fa-rocket"></i> Save &amp; Publish All
         </button>
         <span id="publish-status"></span>
-        <a class="token-setup-link" href="https://github.com/settings/tokens?type=beta" target="_blank">Get Token &rarr;</a>
     </div>
 
     <!-- Body -->
@@ -353,12 +343,15 @@ a{text-decoration:none;color:inherit}
             <!-- PASSWORD TAB -->
             <div id="tab-password" class="tab-pane">
                 <div class="content-card">
-                    <div class="card-header"><div><h2>Change Admin Password</h2><p>Generate a new password hash and update the admin.html file.</p></div></div>
+                    <div class="card-header"><div><h2>Staff Login Info</h2><p>Share this password with authorized staff members.</p></div></div>
                     <div class="card-body">
-                        <div class="form-group"><label>New Password</label><input type="password" id="new-pw" placeholder="Enter new password"></div>
-                        <button class="btn btn-primary" onclick="generateHash()"><i class="fa-solid fa-key"></i> Generate Hash</button>
-                        <div class="hash-box" id="hash-display"></div>
-                        <p style="font-size:0.82rem;color:#A0ADB8;margin-top:16px">Copy the hash above and replace the <code>STORED_HASH</code> value in admin.html via GitHub.</p>
+                        <div class="info-box" style="background:#EBF5FB;border:1px solid #9ec4d7;border-radius:8px;padding:20px;margin-bottom:20px">
+                            <p style="font-size:0.85rem;color:#1A3A52;margin-bottom:12px"><strong><i class="fa-solid fa-users"></i> Current Staff Password:</strong></p>
+                            <p style="font-family:monospace;font-size:1.2rem;color:#1A3A52;background:#fff;padding:12px 16px;border-radius:6px;border:1px solid #D8CFC4" id="current-pw-display">faith2026</p>
+                        </div>
+                        <div class="info-box" style="background:#FFF8E6;border:1px solid #F39C12;border-radius:8px;padding:16px">
+                            <p style="font-size:0.82rem;color:#8B6914"><i class="fa-solid fa-triangle-exclamation"></i> <strong>To change the password:</strong> Edit the <code>STAFF_PASSWORD</code> value in admin.html via GitHub. Only share the password with trusted staff members.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -398,31 +391,18 @@ a{text-decoration:none;color:inherit}
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 // ===== CONFIG =====
-const STORED_HASH = '1ef8e607eaee9385b078c85dd968696d4b6ea7b03a397ea46f3a1c5c852c6103';
+// Shared staff password - change this to your desired password
+const STAFF_PASSWORD = 'faith2026';
 // GitHub config - loaded from config.json at runtime
 let GH_OWNER = 'YOUR_GITHUB_USERNAME';
 let GH_REPO = 'YOUR_REPO_NAME';
 let GH_BRANCH = 'main';
 
-// ===== SHA256 =====
-async function sha256(msg) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
-
-// ===== BASE64 =====
-function b64encode(str) {
-    const bytes = new TextEncoder().encode(str);
-    let bin = '';
-    bytes.forEach(b => bin += String.fromCharCode(b));
-    return btoa(bin);
-}
 
 // ===== AUTH =====
-async function login() {
+function login() {
     const pw = document.getElementById('password-input').value;
-    const hash = await sha256(pw);
-    if (hash === STORED_HASH) {
+    if (pw === STAFF_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'flex';
         initAdmin();
@@ -445,11 +425,6 @@ function switchTab(name, btn) {
     btn.classList.add('active');
 }
 
-// ===== TOKEN =====
-function onTokenInput(val) {
-    localStorage.setItem('faithag_gh_token', val);
-    document.getElementById('token-saved-badge').style.display = val ? 'flex' : 'none';
-}
 
 // ===== UNSAVED =====
 let unsavedEvents = false, unsavedAnnouncement = false, unsavedSermons = false;
@@ -718,52 +693,51 @@ function getConfigData() {
 }
 // ===== PUBLISH ALL =====
 async function publishAll() {
-    const token = document.getElementById('gh-token').value || localStorage.getItem('faithag_gh_token') || '';
-    if (!token) { setStatus('error', 'Please enter your GitHub token first.'); return; }
     const ownerField = document.getElementById('cfg-gh-owner').value.trim();
-        const repoField = document.getElementById('cfg-gh-repo').value.trim();
-        if (ownerField) GH_OWNER = ownerField;
-        if (repoField) GH_REPO = repoField;
-        if (!GH_OWNER || GH_OWNER === 'YOUR_GITHUB_USERNAME' || !GH_REPO || GH_REPO === 'YOUR_REPO_NAME') {
-            setStatus('error', 'Please set GitHub Username and Repo in Church Settings first.');
-            btn.disabled = false;
-            return;
-        }
-            setStatus('publishing', 'Publishing...');
+    const repoField = document.getElementById('cfg-gh-repo').value.trim();
+    if (ownerField) GH_OWNER = ownerField;
+    if (repoField) GH_REPO = repoField;
+
+    if (!GH_OWNER || GH_OWNER === 'YOUR_GITHUB_USERNAME' || !GH_REPO || GH_REPO === 'YOUR_REPO_NAME') {
+        setStatus('error', 'Please set GitHub Username and Repo in Church Settings first.');
+        return;
+    }
+
     const btn = document.getElementById('publish-btn');
     btn.disabled = true;
+    setStatus('publishing', 'Publishing...');
 
     const files = [
-        { path: 'events.json', content: JSON.stringify(events, null, 2), label: 'events' },
-        { path: 'announcements.json', content: JSON.stringify({ active: document.getElementById('banner-active').checked, text: document.getElementById('banner-text').value }, null, 2), label: 'announcement' },
-        { path: 'sermons.json', content: JSON.stringify(getSermonData(), null, 2), label: 'sermons' },
-        { path: 'config.json', content: JSON.stringify(getConfigData(), null, 2), label: 'config' }
+        { path: 'events.json', content: JSON.stringify(events, null, 2) },
+        { path: 'announcements.json', content: JSON.stringify({ active: document.getElementById('banner-active').checked, text: document.getElementById('banner-text').value }, null, 2) },
+        { path: 'sermons.json', content: JSON.stringify(getSermonData(), null, 2) },
+        { path: 'config.json', content: JSON.stringify(getConfigData(), null, 2) }
     ];
 
-    let successCount = 0;
-    for (const file of files) {
-        try {
-            const shaRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
-                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
-            });
-            const shaData = shaRes.ok ? await shaRes.json() : {};
-            const payload = { message: `Update ${file.path} via admin panel`, content: b64encode(file.content), branch: GH_BRANCH };
-            if (shaData.sha) payload.sha = shaData.sha;
-            const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
-                method: 'PUT',
-                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (putRes.ok) successCount++;
-            else { const err = await putRes.json(); throw new Error(err.message); }
-        } catch(e) {
-            setStatus('error', 'Error: ' + e.message);
-            btn.disabled = false;
-            return;
+    try {
+        const response = await fetch('/.netlify/functions/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                files: files,
+                owner: GH_OWNER,
+                repo: GH_REPO,
+                branch: GH_BRANCH
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            setStatus('success', '\u2713 All ' + files.length + ' files published! Site updating...');
+            markAllSaved();
+        } else {
+            setStatus('error', 'Error: ' + (result.error || result.message));
         }
+    } catch (e) {
+        setStatus('error', 'Error: ' + e.message);
     }
-    setStatus('success', '\u2713 All ' + successCount + ' files published! Site updating...');
-    markAllSaved();
+
     btn.disabled = false;
     setTimeout(() => setStatus('', ''), 6000);
 }
@@ -774,15 +748,6 @@ function setStatus(type, msg) {
     el.textContent = msg;
 }
 
-// ===== PASSWORD =====
-async function generateHash() {
-    const pw = document.getElementById('new-pw').value;
-    if (!pw) { alert('Enter a password first.'); return; }
-    const hash = await sha256(pw);
-    const box = document.getElementById('hash-display');
-    box.textContent = hash;
-    box.style.display = 'block';
-}
 
 // ===== INIT =====
 function initAdmin() {
