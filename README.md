@@ -103,13 +103,13 @@ Visit `/admin.html` on your live site.
 | **Announcement** | Toggle the top banner on/off, edit message |
 | **Sermons** | Update featured sermon, YouTube embed, speaker |
 | **Church Settings** | Edit all config.json values (name, address, social, GitHub settings) |
-| **Change Password** | Generate a new SHA-256 password hash |
+| **Staff Login Info** | View and share the staff password |
 
-### Default Password
+### Default Staff Password
 ```
-faithag2026
+faith2026
 ```
-Change it immediately: go to **Change Password**, generate a hash, then replace `STORED_HASH` in `admin.html`.
+Share this password with authorized staff members. To change it, edit the `STAFF_PASSWORD` value in `admin.html` via GitHub.
 
 ### Publishing Changes
 Click **"Save & Publish All"** — the admin panel pushes all JSON files to GitHub via the API, and Netlify redeploys in ~30–60 seconds.
@@ -129,13 +129,12 @@ Required once per browser to enable publishing from the admin panel.
 
 ---
 
-## Changing the Admin Password
+## Changing the Staff Password
 
-1. Open the admin panel → **Change Password** tab
-2. Type your new password and click **Generate Hash**
-3. Copy the hash string
-4. Edit `admin.html` on GitHub → find `STORED_HASH` near the top of the `<script>` block
-5. Replace the existing hash value with your new one
+1. Edit `admin.html` on GitHub
+2. Find `STAFF_PASSWORD` near the top of the `<script>` block
+3. Replace the password value with your new one (e.g., `const STAFF_PASSWORD = 'yournewpassword';`)
+4. Commit the change — the new password takes effect immediately
 
 ---
 

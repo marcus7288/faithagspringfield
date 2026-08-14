@@ -153,7 +153,7 @@ a{text-decoration:none;color:inherit}
     <img src="logo 2.png" alt="Faith AG" class="login-logo">
     <h1>Staff Admin Panel</h1>
     <p>Faith Assembly of God</p>
-    <input type="password" id="password-input" class="login-input" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')login()">
+    <input type="password" id="password-input" class="login-input" placeholder="Enter staff password" onkeydown="if(event.key==='Enter')login()">
     <button class="login-btn" onclick="login()"><i class="fa-solid fa-lock-open"></i> Sign In</button>
     <p class="login-error" id="login-error">Incorrect password. Please try again.</p>
 </div>
@@ -353,12 +353,15 @@ a{text-decoration:none;color:inherit}
             <!-- PASSWORD TAB -->
             <div id="tab-password" class="tab-pane">
                 <div class="content-card">
-                    <div class="card-header"><div><h2>Change Admin Password</h2><p>Generate a new password hash and update the admin.html file.</p></div></div>
+                    <div class="card-header"><div><h2>Staff Login Info</h2><p>Share this password with authorized staff members.</p></div></div>
                     <div class="card-body">
-                        <div class="form-group"><label>New Password</label><input type="password" id="new-pw" placeholder="Enter new password"></div>
-                        <button class="btn btn-primary" onclick="generateHash()"><i class="fa-solid fa-key"></i> Generate Hash</button>
-                        <div class="hash-box" id="hash-display"></div>
-                        <p style="font-size:0.82rem;color:#A0ADB8;margin-top:16px">Copy the hash above and replace the <code>STORED_HASH</code> value in admin.html via GitHub.</p>
+                        <div class="info-box" style="background:#EBF5FB;border:1px solid #9ec4d7;border-radius:8px;padding:20px;margin-bottom:20px">
+                            <p style="font-size:0.85rem;color:#1A3A52;margin-bottom:12px"><strong><i class="fa-solid fa-users"></i> Current Staff Password:</strong></p>
+                            <p style="font-family:monospace;font-size:1.2rem;color:#1A3A52;background:#fff;padding:12px 16px;border-radius:6px;border:1px solid #D8CFC4" id="current-pw-display">faith2026</p>
+                        </div>
+                        <div class="info-box" style="background:#FFF8E6;border:1px solid #F39C12;border-radius:8px;padding:16px">
+                            <p style="font-size:0.82rem;color:#8B6914"><i class="fa-solid fa-triangle-exclamation"></i> <strong>To change the password:</strong> Edit the <code>STAFF_PASSWORD</code> value in admin.html via GitHub. Only share the password with trusted staff members.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -398,17 +401,12 @@ a{text-decoration:none;color:inherit}
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 // ===== CONFIG =====
-const STORED_HASH = '1ef8e607eaee9385b078c85dd968696d4b6ea7b03a397ea46f3a1c5c852c6103';
+// Shared staff password - change this to your desired password
+const STAFF_PASSWORD = 'faith2026';
 // GitHub config - loaded from config.json at runtime
 let GH_OWNER = 'YOUR_GITHUB_USERNAME';
 let GH_REPO = 'YOUR_REPO_NAME';
 let GH_BRANCH = 'main';
-
-// ===== SHA256 =====
-async function sha256(msg) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
 
 // ===== BASE64 =====
 function b64encode(str) {
@@ -419,10 +417,9 @@ function b64encode(str) {
 }
 
 // ===== AUTH =====
-async function login() {
+function login() {
     const pw = document.getElementById('password-input').value;
-    const hash = await sha256(pw);
-    if (hash === STORED_HASH) {
+    if (pw === STAFF_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('admin-panel').style.display = 'flex';
         initAdmin();
@@ -774,15 +771,6 @@ function setStatus(type, msg) {
     el.textContent = msg;
 }
 
-// ===== PASSWORD =====
-async function generateHash() {
-    const pw = document.getElementById('new-pw').value;
-    if (!pw) { alert('Enter a password first.'); return; }
-    const hash = await sha256(pw);
-    const box = document.getElementById('hash-display');
-    box.textContent = hash;
-    box.style.display = 'block';
-}
 
 // ===== INIT =====
 function initAdmin() {
