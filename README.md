@@ -116,16 +116,25 @@ Click **"Save & Publish All"** — the admin panel pushes all JSON files to GitH
 
 ---
 
-## GitHub Token Setup
+## GitHub Token Setup (One-Time Admin Setup)
 
-Required once per browser to enable publishing from the admin panel.
+Required once to enable publishing from the admin panel. This is done by an administrator in Netlify, not by staff users.
 
+**Step 1 — Create a GitHub Token:**
 1. Go to [github.com/settings/tokens?type=beta](https://github.com/settings/tokens?type=beta)
-2. Click **Generate new token** → give it a name (e.g. *Church Admin Panel*)
+2. Click **Generate new token** → name it (e.g. *Church Admin Panel*)
 3. Set **Repository access** → Only selected repositories → your church repo
-4. Under **Permissions**: set **Contents** to **Read and write** (Metadata is auto-selected)
-5. Click **Generate token**, copy it
-6. Paste into the green token bar in the admin panel — it saves to your browser automatically
+4. Under **Permissions**: set **Contents** to **Read and write**
+5. Click **Generate token** and copy it
+
+**Step 2 — Add to Netlify:**
+1. Go to your Netlify site dashboard
+2. Navigate to **Site settings** → **Environment variables**
+3. Click **Add a variable**
+4. Set the key as `GITHUB_TOKEN` and paste your token as the value
+5. Click **Save**
+
+That's it! Staff can now use the admin panel without needing tokens.
 
 ---
 

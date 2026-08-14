@@ -36,16 +36,10 @@ a{text-decoration:none;color:inherit}
 
 /* PUBLISH BAR */
 .publish-bar{background:#1a472a;padding:12px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:2px solid #145222}
-.publish-bar label{color:#d4edda;font-size:0.8rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
-.token-input{flex:1;min-width:220px;max-width:420px;padding:8px 12px;border:1.5px solid rgba(255,255,255,0.2);border-radius:6px;background:rgba(255,255,255,0.08);color:#fff;font-family:'Inter',sans-serif;font-size:0.88rem}
-.token-input::placeholder{color:rgba(255,255,255,0.4)}
-.token-input:focus{outline:none;border-color:rgba(255,255,255,0.5)}
-.token-saved{font-size:0.75rem;color:#7bcf8b;display:none;align-items:center;gap:4px}
-#publish-status{font-size:0.8rem;color:rgba(255,255,255,0.7);min-width:140px}
+#publish-status{font-size:0.8rem;color:rgba(255,255,255,0.7);margin-left:16px}
 #publish-status.success{color:#7bcf8b}
 #publish-status.error{color:#f08080}
 #publish-status.publishing{color:#ffd700}
-.token-setup-link{color:rgba(255,255,255,0.5);font-size:0.75rem;text-decoration:underline;cursor:pointer;white-space:nowrap}
 
 /* TABS */
 .admin-body{display:flex;flex:1}
@@ -176,15 +170,11 @@ a{text-decoration:none;color:inherit}
 
     <!-- Publish Bar -->
     <div class="publish-bar">
-        <label><i class="fa-brands fa-github"></i> GitHub Token</label>
-        <input type="password" id="gh-token" class="token-input" placeholder="ghp_xxxx... (saved in browser)" oninput="onTokenInput(this.value)">
-        <span class="token-saved" id="token-saved-badge"><i class="fa-solid fa-check"></i> Saved</span>
         <button class="btn btn-publish" id="publish-btn" onclick="publishAll()">
             <span id="unsaved-dot" class="unsaved-dot show"></span>
             <i class="fa-solid fa-rocket"></i> Save &amp; Publish All
         </button>
         <span id="publish-status"></span>
-        <a class="token-setup-link" href="https://github.com/settings/tokens?type=beta" target="_blank">Get Token &rarr;</a>
     </div>
 
     <!-- Body -->
@@ -408,13 +398,6 @@ let GH_OWNER = 'YOUR_GITHUB_USERNAME';
 let GH_REPO = 'YOUR_REPO_NAME';
 let GH_BRANCH = 'main';
 
-// ===== BASE64 =====
-function b64encode(str) {
-    const bytes = new TextEncoder().encode(str);
-    let bin = '';
-    bytes.forEach(b => bin += String.fromCharCode(b));
-    return btoa(bin);
-}
 
 // ===== AUTH =====
 function login() {
@@ -442,11 +425,6 @@ function switchTab(name, btn) {
     btn.classList.add('active');
 }
 
-// ===== TOKEN =====
-function onTokenInput(val) {
-    localStorage.setItem('faithag_gh_token', val);
-    document.getElementById('token-saved-badge').style.display = val ? 'flex' : 'none';
-}
 
 // ===== UNSAVED =====
 let unsavedEvents = false, unsavedAnnouncement = false, unsavedSermons = false;
@@ -715,52 +693,51 @@ function getConfigData() {
 }
 // ===== PUBLISH ALL =====
 async function publishAll() {
-    const token = document.getElementById('gh-token').value || localStorage.getItem('faithag_gh_token') || '';
-    if (!token) { setStatus('error', 'Please enter your GitHub token first.'); return; }
     const ownerField = document.getElementById('cfg-gh-owner').value.trim();
-        const repoField = document.getElementById('cfg-gh-repo').value.trim();
-        if (ownerField) GH_OWNER = ownerField;
-        if (repoField) GH_REPO = repoField;
-        if (!GH_OWNER || GH_OWNER === 'YOUR_GITHUB_USERNAME' || !GH_REPO || GH_REPO === 'YOUR_REPO_NAME') {
-            setStatus('error', 'Please set GitHub Username and Repo in Church Settings first.');
-            btn.disabled = false;
-            return;
-        }
-            setStatus('publishing', 'Publishing...');
+    const repoField = document.getElementById('cfg-gh-repo').value.trim();
+    if (ownerField) GH_OWNER = ownerField;
+    if (repoField) GH_REPO = repoField;
+
+    if (!GH_OWNER || GH_OWNER === 'YOUR_GITHUB_USERNAME' || !GH_REPO || GH_REPO === 'YOUR_REPO_NAME') {
+        setStatus('error', 'Please set GitHub Username and Repo in Church Settings first.');
+        return;
+    }
+
     const btn = document.getElementById('publish-btn');
     btn.disabled = true;
+    setStatus('publishing', 'Publishing...');
 
     const files = [
-        { path: 'events.json', content: JSON.stringify(events, null, 2), label: 'events' },
-        { path: 'announcements.json', content: JSON.stringify({ active: document.getElementById('banner-active').checked, text: document.getElementById('banner-text').value }, null, 2), label: 'announcement' },
-        { path: 'sermons.json', content: JSON.stringify(getSermonData(), null, 2), label: 'sermons' },
-        { path: 'config.json', content: JSON.stringify(getConfigData(), null, 2), label: 'config' }
+        { path: 'events.json', content: JSON.stringify(events, null, 2) },
+        { path: 'announcements.json', content: JSON.stringify({ active: document.getElementById('banner-active').checked, text: document.getElementById('banner-text').value }, null, 2) },
+        { path: 'sermons.json', content: JSON.stringify(getSermonData(), null, 2) },
+        { path: 'config.json', content: JSON.stringify(getConfigData(), null, 2) }
     ];
 
-    let successCount = 0;
-    for (const file of files) {
-        try {
-            const shaRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
-                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
-            });
-            const shaData = shaRes.ok ? await shaRes.json() : {};
-            const payload = { message: `Update ${file.path} via admin panel`, content: b64encode(file.content), branch: GH_BRANCH };
-            if (shaData.sha) payload.sha = shaData.sha;
-            const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${file.path}`, {
-                method: 'PUT',
-                headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (putRes.ok) successCount++;
-            else { const err = await putRes.json(); throw new Error(err.message); }
-        } catch(e) {
-            setStatus('error', 'Error: ' + e.message);
-            btn.disabled = false;
-            return;
+    try {
+        const response = await fetch('/.netlify/functions/publish', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                files: files,
+                owner: GH_OWNER,
+                repo: GH_REPO,
+                branch: GH_BRANCH
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            setStatus('success', '\u2713 All ' + files.length + ' files published! Site updating...');
+            markAllSaved();
+        } else {
+            setStatus('error', 'Error: ' + (result.error || result.message));
         }
+    } catch (e) {
+        setStatus('error', 'Error: ' + e.message);
     }
-    setStatus('success', '\u2713 All ' + successCount + ' files published! Site updating...');
-    markAllSaved();
+
     btn.disabled = false;
     setTimeout(() => setStatus('', ''), 6000);
 }
