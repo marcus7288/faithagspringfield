@@ -137,6 +137,38 @@ a{text-decoration:none;color:inherit}
 .stat-card .stat-num{font-family:'Outfit',sans-serif;font-size:2rem;font-weight:700;color:#1A3A52;line-height:1}
 .stat-card .stat-label{font-size:0.8rem;color:#A0ADB8;margin-top:4px}
 .stat-card i{font-size:1.4rem;color:#E5D4A6;margin-bottom:8px}
+
+/* TUTORIAL */
+#tutorial-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center}
+#tutorial-overlay.active{display:flex}
+.tutorial-modal{background:#fff;border-radius:20px;width:100%;max-width:600px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.4);animation:tutorialSlideIn 0.4s ease}
+@keyframes tutorialSlideIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.tutorial-header{background:linear-gradient(135deg,#1A3A52,#2C4A65);color:#fff;padding:28px 32px;text-align:center}
+.tutorial-header h2{font-family:'Outfit',sans-serif;font-size:1.6rem;margin-bottom:8px}
+.tutorial-header p{opacity:0.85;font-size:0.95rem}
+.tutorial-progress{display:flex;justify-content:center;gap:8px;margin-top:20px}
+.tutorial-progress .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.3);transition:all 0.3s}
+.tutorial-progress .dot.active{background:#fff;transform:scale(1.2)}
+.tutorial-progress .dot.completed{background:#27AE60}
+.tutorial-body{padding:32px}
+.tutorial-step{display:none;text-align:center}
+.tutorial-step.active{display:block;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.tutorial-step .step-icon{width:80px;height:80px;border-radius:50%;background:#EBF5FB;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem;color:#1A3A52}
+.tutorial-step h3{font-family:'Outfit',sans-serif;font-size:1.3rem;color:#1A2332;margin-bottom:12px}
+.tutorial-step p{color:#6B8090;font-size:0.95rem;line-height:1.7;max-width:420px;margin:0 auto}
+.tutorial-step .step-tip{background:#FEF9E7;border-radius:10px;padding:14px 18px;margin-top:20px;font-size:0.85rem;color:#7D6608;text-align:left}
+.tutorial-step .step-tip i{margin-right:8px}
+.tutorial-footer{padding:20px 32px 28px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #F0F2F5}
+.tutorial-footer .btn-skip{background:none;border:none;color:#A0ADB8;font-size:0.88rem;cursor:pointer;padding:8px 16px}
+.tutorial-footer .btn-skip:hover{color:#6B8090}
+.tutorial-nav{display:flex;gap:10px}
+.tutorial-nav .btn-prev{background:#F0F2F5;color:#3D5166;border:none;padding:12px 24px;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;transition:all 0.2s}
+.tutorial-nav .btn-prev:hover{background:#E5E9EE}
+.tutorial-nav .btn-next{background:#1A3A52;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;transition:all 0.2s}
+.tutorial-nav .btn-next:hover{background:#2C4A65}
+.tutorial-nav .btn-finish{background:#27AE60;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.9rem;transition:all 0.2s}
+.tutorial-nav .btn-finish:hover{background:#219150}
 </style>
 </head>
 <body>
@@ -213,6 +245,9 @@ a{text-decoration:none;color:inherit}
             <div class="sidebar-section" style="margin-top:auto;padding-top:20px;border-top:1px solid #E5E9EE">
                 <button class="sidebar-link" onclick="switchTab('onboarding', this)" style="color:#27AE60">
                     <i class="fa-solid fa-circle-question"></i> Setup Guide
+                </button>
+                <button class="sidebar-link" onclick="restartTutorial()" style="color:#3498DB">
+                    <i class="fa-solid fa-play-circle"></i> Replay Tutorial
                 </button>
             </div>
         </div>
@@ -455,6 +490,7 @@ a{text-decoration:none;color:inherit}
                             <h2><i class="fa-solid fa-rocket" style="color:#27AE60"></i> Getting Started</h2>
                             <p>Welcome! Follow these steps to set up your church website.</p>
                         </div>
+                        <button class="btn btn-outline" onclick="restartTutorial()"><i class="fa-solid fa-play-circle"></i> Watch Tutorial</button>
                     </div>
                     <div class="card-body">
                         <div style="display:grid;gap:20px">
@@ -569,6 +605,76 @@ a{text-decoration:none;color:inherit}
     </div>
 </div>
 </div>
+
+<!-- TUTORIAL OVERLAY -->
+<div id="tutorial-overlay">
+    <div class="tutorial-modal">
+        <div class="tutorial-header">
+            <h2><i class="fa-solid fa-graduation-cap"></i> Welcome to Your Admin Panel</h2>
+            <p>Let's take a quick tour of the features</p>
+            <div class="tutorial-progress">
+                <span class="dot active" data-step="0"></span>
+                <span class="dot" data-step="1"></span>
+                <span class="dot" data-step="2"></span>
+                <span class="dot" data-step="3"></span>
+                <span class="dot" data-step="4"></span>
+                <span class="dot" data-step="5"></span>
+            </div>
+        </div>
+        <div class="tutorial-body">
+            <!-- Step 0: Welcome -->
+            <div class="tutorial-step active" data-step="0">
+                <div class="step-icon"><i class="fa-solid fa-hand-wave"></i></div>
+                <h3>Welcome!</h3>
+                <p>This admin panel lets you manage your church website easily. No coding required! Let's walk through the main features together.</p>
+            </div>
+            <!-- Step 1: Events -->
+            <div class="tutorial-step" data-step="1">
+                <div class="step-icon" style="background:#E8F8E8;color:#27AE60"><i class="fa-regular fa-calendar"></i></div>
+                <h3>Manage Events</h3>
+                <p>Add upcoming services, special events, and gatherings. Events automatically display on your website sorted by date.</p>
+                <div class="step-tip"><i class="fa-solid fa-lightbulb"></i> Click "+ Add Event" to create your first event with a title, date, time, and description.</div>
+            </div>
+            <!-- Step 2: Announcements -->
+            <div class="tutorial-step" data-step="2">
+                <div class="step-icon" style="background:#FEF9E7;color:#F39C12"><i class="fa-solid fa-bullhorn"></i></div>
+                <h3>Announcement Banner</h3>
+                <p>Display important messages at the top of your website. Perfect for service changes, special announcements, or urgent notices.</p>
+                <div class="step-tip"><i class="fa-solid fa-lightbulb"></i> Toggle the banner on/off and update the message anytime.</div>
+            </div>
+            <!-- Step 3: Sermons -->
+            <div class="tutorial-step" data-step="3">
+                <div class="step-icon" style="background:#FDEDEC;color:#E74C3C"><i class="fa-brands fa-youtube"></i></div>
+                <h3>Feature Sermons</h3>
+                <p>Share your latest sermons by adding YouTube video links. The video will automatically embed on your website.</p>
+                <div class="step-tip"><i class="fa-solid fa-lightbulb"></i> Just paste the YouTube URL and add the sermon title and speaker name.</div>
+            </div>
+            <!-- Step 4: Settings -->
+            <div class="tutorial-step" data-step="4">
+                <div class="step-icon" style="background:#EBF5FB;color:#3498DB"><i class="fa-solid fa-gear"></i></div>
+                <h3>Church Settings & Theme</h3>
+                <p>Update your church information, contact details, social media links, and customize your website's colors to match your branding.</p>
+                <div class="step-tip"><i class="fa-solid fa-lightbulb"></i> Don't forget to set your church name and address first!</div>
+            </div>
+            <!-- Step 5: Publishing -->
+            <div class="tutorial-step" data-step="5">
+                <div class="step-icon" style="background:#E8F8E8;color:#27AE60"><i class="fa-solid fa-rocket"></i></div>
+                <h3>Save & Publish</h3>
+                <p>When you're done making changes, click the green <strong>"Save & Publish All"</strong> button at the top. Your website updates in about 30-60 seconds!</p>
+                <div class="step-tip"><i class="fa-solid fa-lightbulb"></i> Look for the red dot on tabs — it indicates unsaved changes.</div>
+            </div>
+        </div>
+        <div class="tutorial-footer">
+            <button class="btn-skip" onclick="skipTutorial()">Skip tutorial</button>
+            <div class="tutorial-nav">
+                <button class="btn-prev" onclick="prevTutorialStep()" style="display:none"><i class="fa-solid fa-arrow-left"></i> Back</button>
+                <button class="btn-next" onclick="nextTutorialStep()">Next <i class="fa-solid fa-arrow-right"></i></button>
+                <button class="btn-finish" onclick="finishTutorial()" style="display:none"><i class="fa-solid fa-check"></i> Get Started</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 // ===== CONFIG =====
@@ -990,6 +1096,78 @@ function setStatus(type, msg) {
 }
 
 
+// ===== TUTORIAL =====
+let tutorialStep = 0;
+const totalSteps = 6;
+
+function showTutorial() {
+    tutorialStep = 0;
+    updateTutorialUI();
+    document.getElementById('tutorial-overlay').classList.add('active');
+}
+
+function closeTutorial() {
+    document.getElementById('tutorial-overlay').classList.remove('active');
+}
+
+function skipTutorial() {
+    localStorage.setItem('faithag_tutorial_completed', 'true');
+    closeTutorial();
+}
+
+function finishTutorial() {
+    localStorage.setItem('faithag_tutorial_completed', 'true');
+    closeTutorial();
+    // Navigate to the setup guide
+    switchTab('onboarding', document.querySelector('[onclick*="onboarding"]'));
+}
+
+function nextTutorialStep() {
+    if (tutorialStep < totalSteps - 1) {
+        tutorialStep++;
+        updateTutorialUI();
+    }
+}
+
+function prevTutorialStep() {
+    if (tutorialStep > 0) {
+        tutorialStep--;
+        updateTutorialUI();
+    }
+}
+
+function updateTutorialUI() {
+    // Update steps visibility
+    document.querySelectorAll('.tutorial-step').forEach((step, i) => {
+        step.classList.toggle('active', i === tutorialStep);
+    });
+    // Update progress dots
+    document.querySelectorAll('.tutorial-progress .dot').forEach((dot, i) => {
+        dot.classList.remove('active', 'completed');
+        if (i === tutorialStep) dot.classList.add('active');
+        else if (i < tutorialStep) dot.classList.add('completed');
+    });
+    // Update buttons
+    const prevBtn = document.querySelector('.btn-prev');
+    const nextBtn = document.querySelector('.btn-next');
+    const finishBtn = document.querySelector('.btn-finish');
+    prevBtn.style.display = tutorialStep > 0 ? 'inline-flex' : 'none';
+    nextBtn.style.display = tutorialStep < totalSteps - 1 ? 'inline-flex' : 'none';
+    finishBtn.style.display = tutorialStep === totalSteps - 1 ? 'inline-flex' : 'none';
+}
+
+function checkFirstTimeUser() {
+    const completed = localStorage.getItem('faithag_tutorial_completed');
+    if (!completed) {
+        setTimeout(showTutorial, 500); // Show after brief delay
+    }
+}
+
+function restartTutorial() {
+    localStorage.removeItem('faithag_tutorial_completed');
+    showTutorial();
+}
+
 // ===== INIT =====
 function initAdmin() {
     // Display the current password in the Staff Login Info tab
@@ -1001,6 +1179,8 @@ function initAdmin() {
     loadAnnouncement();
     loadSermons();
     loadConfigData();
+    // Check for first-time user
+    checkFirstTimeUser();
 }
 </script>
 </body>
